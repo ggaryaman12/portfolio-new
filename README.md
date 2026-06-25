@@ -1,49 +1,52 @@
 # Radhika Atolia — Portfolio
 
-Static single-page portfolio. No build step. Plain HTML + CSS + JS.
+Static single-page-ish portfolio site. **No build step.** Plain HTML + CSS + JS.
+Visual design follows a warm "cutting-mat" aesthetic (teal panels, Libre Baskerville
+serif + DM Sans + Fragment Mono, scattered sticker doodles, playful motion).
+All copy and artwork here are original placeholders — swap freely.
 
-Design system follows `ipshitasingh.com-DESIGN.md` (warm teal-grid aesthetic,
-Libre Baskerville + DM Sans, pill buttons, hover-lift cards, scroll-reveal).
-Content is original placeholder copy for Radhika Atolia — swap freely.
+## Live
+- Production: https://radhikaatolia.vercel.app
+- Auto-deploys on every push to `main` (GitHub → Vercel are connected).
+
+## Run locally
+```bash
+cd portfolio-new
+python3 -m http.server 5173
+# open http://127.0.0.1:5173
+```
+No npm install, no bundler. Just open the files.
 
 ## Files
-- `index.html` — page structure + inline SVG doodles
-- `styles.css` — full design-system tokens + components
-- `script.js` — mobile nav, scroll reveal, scroll-spy, form demo
-- `vercel.json` — clean URLs config
+| File | What |
+|------|------|
+| `index.html` | Home: hero (cutting-mat + jumping stickers), works marquee, skill-pill cloud, FAQ, contact |
+| `about.html` | About: 3D tilt portrait card, bio, verse panel |
+| `works.html` | Works grid |
+| `side-quests.html` | Side-quest projects (alternating media rows) |
+| `styles.css` | All styles + design tokens (`:root`) + animations |
+| `script.js` | Cursor, scroll-reveal, marquee auto-scroll, 3D tilt, parallax, mobile menu, ruler |
+| `vercel.json` | Static config (clean URLs) |
 
-## Preview locally
+## Design tokens (edit in `styles.css` `:root`)
+- Colors: blue `#0000EE`, teal `#1B6B6F`, orange `#FF5900`, burgundy `#26150B`, cream body `#F8F6F3`, light-blue `#CADCFC`
+- Fonts: Libre Baskerville (serif headings), DM Sans (body/UI), Fragment Mono (labels)
+- Radius: pills `99px`, cards `8px`, panels `24px`
+- Spacing scale: `--s4`…`--s100` (4px base)
+
+## Key interactions (in `script.js`)
+- Custom cursor (dot + magnify ring) · scroll-reveal (`.reveal`) · hero sticker spring-jump + parallax
+- Works marquee: native scroll + JS auto-scroll (`#universeMarquee`)
+- 3D tilt: `.card`, `.tilt3d`, `#contactPanel` · mobile full-screen overlay menu · cutting-mat ruler numbers
+
+## Deploy
+Connected to Vercel — **just push**:
 ```bash
-cd ~/radhika-portfolio
-python3 -m http.server 8000
-# open http://localhost:8000
+git add -A && git commit -m "your change" && git push
 ```
+Production updates automatically in ~20s. (Manual fallback: `npx vercel --prod --yes`.)
 
-## Deploy to Vercel (free)
-
-### Option A — drag & drop (no git)
-1. Go to https://vercel.com → sign in (free).
-2. Add New → Project → "deploy a static folder" / or use Vercel CLI below.
-
-### Option B — Vercel CLI (fastest)
-```bash
-npm i -g vercel
-cd ~/radhika-portfolio
-vercel        # first run: log in + link, accept defaults
-vercel --prod # promote to production URL
-```
-Framework preset: **Other** (static). No build command. Output dir: `.`
-
-### Option C — GitHub + Vercel (auto-deploy on push)
-```bash
-cd ~/radhika-portfolio
-git init && git add . && git commit -m "init portfolio"
-gh repo create radhika-portfolio --public --source=. --push
-```
-Then in Vercel: Add New → Project → import the repo → Deploy.
-
-## Customize
-- Name/links: edit text in `index.html`.
-- Colors/spacing/type: edit `:root` tokens in `styles.css`.
-- Replace SVG doodles with your own illustrations (same `.doodle` classes).
-- Wire the contact form to a real backend (Formspree, Vercel Functions, etc).
+## Placeholders to replace with real content
+- Project images use `https://picsum.photos/...` — swap for real screenshots.
+- Bio, project blurbs, FAQ answers, social links (`index.html` footer), resume link (nav `Resume`), email `hello@radhika.design`.
+- Contact form is a front-end demo — wire to a backend (Formspree etc.) to receive messages.
