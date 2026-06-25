@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#F8F6F3" />
+  <title>About — Radhika Atolia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,900&family=Fragment+Mono&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <header class="nav">
+    <nav class="nav__inner">
+      <div class="nav__left" id="navLeft"><a href="about.html" class="active">About</a><a href="works.html">Works</a></div>
+      <a href="index.html" class="nav__brand">Radhika</a>
+      <div class="nav__right" id="navRight"><a href="side-quests.html">Side quests</a><a href="#" target="_blank" rel="noopener">Resume</a></div>
+      <button class="nav__toggle" id="navToggle" aria-label="Menu">☰</button>
+    </nav>
+  </header>
+
+  <section>
+    <div class="wrap about-intro">
+      <div class="serif-title reveal" style="margin-bottom:var(--s52)">Wait a minute, who are you?</div>
+
+      <!-- 3D portrait hero -->
+      <div class="about-hero reveal">
+        <div class="tilt3d about-card">
+          <div class="about-card__img"><img src="https://picsum.photos/seed/radhika-portrait/640/800" alt="Radhika" loading="lazy" /></div>
+          <span class="float-badge fb1" style="--z:70px"><svg viewBox="0 0 48 48" fill="none" stroke="#26150B" stroke-width="3" stroke-linecap="round"><rect x="8" y="14" width="32" height="24" rx="5" fill="#FF5900"/><circle cx="24" cy="26" r="7"/><path d="M18 14l3-5h6l3 5"/></svg></span>
+          <span class="float-badge fb2" style="--z:96px"><svg viewBox="0 0 48 48" fill="none" stroke="#26150B" stroke-width="3"><circle cx="24" cy="24" r="16" fill="#CADCFC"/><circle cx="18" cy="20" r="2.5" fill="#FF5900" stroke="none"/><circle cx="28" cy="18" r="2.5" fill="#1B6B6F" stroke="none"/><circle cx="30" cy="28" r="2.5" fill="#C0341F" stroke="none"/></svg></span>
+          <span class="float-badge fb3" style="--z:54px"><svg viewBox="0 0 48 48" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"><path d="M24 38C12 28 16 14 24 21C32 14 36 28 24 38Z" fill="#FF5900"/></svg></span>
+        </div>
+        <div class="about-hero__text">
+          <span class="eyebrow">About</span>
+          <h2 style="margin:var(--s12) 0 var(--s16)">Hi, I'm Radhika.</h2>
+          <p>A product designer with a soft spot for the small, human moments in an interface. I believe good design should feel like a friendly nook — not a sterile dashboard.</p>
+          <div class="about-chips">
+            <span class="chip">Product design</span><span class="chip">Design systems</span>
+            <span class="chip">Prototyping</span><span class="chip">Illustration</span>
+            <span class="chip">User research</span><span class="chip">Figma</span>
+          </div>
+        </div>
+      </div>
+
+      <p class="about-line right reveal">I like to <mark>start with research</mark> and sit with a problem before touching a single frame — understanding what's actually breaking and where the gaps are.</p>
+
+      <div class="about-figure reveal">
+        <div class="about-portrait"><img src="https://picsum.photos/seed/radhika-stills/480/600" alt="Stills" loading="lazy" /></div>
+        <p class="cap">I love capturing stills — be it people, places, or just a quiet moment.</p>
+      </div>
+
+      <p class="about-line left reveal">I adore colour, and I secretly judge people who only ever wear black.</p>
+
+      <p class="about-line right reveal">Off-screen I'm either <mark>travelling</mark>, hoarding stationery, or re-reading the same comfort books for the hundredth time.</p>
+
+      <p class="about-line left reveal">I'm a <mark>certified water baby</mark> and emotionally stable only within 500 metres of a large body of water.</p>
+
+      <div class="darkpanel reveal">
+        <span class="eyebrow">Bits, bops and behind the screen</span>
+        <h3>A tiny note of things I love</h3>
+        <p>Sticky notes that pile up faster than I can use them. The first sip of coffee before the day fully starts. Tiny doodles in the margins. The hush right before a good idea lands.</p>
+        <p>Mostly, I just like making small, warm things — and leaving a little personality behind in everything I ship.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="contact" id="contact">
+    <div class="wrap reveal">
+      <span class="eyebrow">Contact</span>
+      <div class="serif-title">I'm a keen learner, always open to new opportunities</div>
+      <p class="lead">Want to work together, or just say hi? My inbox is always open.</p>
+      <div class="cta-strip"><a href="mailto:hello@radhika.design" class="btn btn--primary">Say hello</a></div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="wrap">
+      <p class="footer__note">Time is precious — thanks for spending a little of yours here.</p>
+      <p class="footer__brand">Radhika Atolia · © <span id="yr"></span></p>
+      <div class="footer__social"><a href="#" class="ilink">Dribbble</a><a href="#" class="ilink">LinkedIn</a><a href="#" class="ilink">Instagram</a></div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
