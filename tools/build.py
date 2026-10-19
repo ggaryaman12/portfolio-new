@@ -101,6 +101,9 @@ for p in PROJECTS:
     p["deck"] = sorted(glob.glob(f"assets/behance/{p['slug']}/*"))
 
 # --------------------------------------------------------------- shared
+CURTAIN = '''<div class="curtain" aria-hidden="true"><span class="curtain__tag">Radhika Atolia · Product Designer</span><p class="curtain__q"></p><span class="curtain__sub"></span><i class="curtain__bar"></i></div>
+<script>(function(){var Q=[["Pixels are just tiny opinions.","— a designer, probably"],["Ctrl+Z works on designs. Not on Mondays.","— every designer, Monday"],["No users were harmed in the making of this portfolio.","— legal, unofficially"],["Lorem ipsum dolor sit… hire me.","— the placeholder text"],["Hold on, let me ChatGPT this.","— a sticker I own"],["final_final_v7 is a design methodology.","— my Figma files"],["Making messy problems simple. On purpose.","— Radhika"],["This button was 2px off. I fixed it. You’re welcome.","— nobody noticed"],["Kerning is my cardio.","— Radhika, mid-sprint"],["Hiring a designer: 10/10 would recommend.","— everyone who did"],["It’s not a bug. It’s an unresearched feature.","— a developer, nervous"],["Good design is invisible. Great design buys you coffee.","— boba, actually"],["I put the ‘fun’ in ‘functional requirements’.","— LinkedIn, humbly"],["Loading… still faster than a 5-step signup.","— drivers, unanimously"],["Two attempts a day. Zero excuses. One streak.","— the Jugnoo system"]];var k='rq',l=+sessionStorage.getItem(k);var i;do{i=Math.floor(Math.random()*Q.length)}while(i===l&&Q.length>1);try{sessionStorage.setItem(k,i)}catch(e){}window.__Q=Q;var c=document.currentScript.previousElementSibling;c.querySelector('.curtain__q').textContent=Q[i][0];c.querySelector('.curtain__sub').textContent=Q[i][1];})();</script>'''
+
 def head(title, desc, page="", og=None):
     og = og or f"{SITE}/assets/og.jpg"
     return f'''<!DOCTYPE html>
@@ -119,7 +122,7 @@ def head(title, desc, page="", og=None):
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<div class="curtain"><img src="assets/favicon.png" alt="" width="54" height="54"></div>
+{CURTAIN}
 <div class="progress"><i></i></div>
 '''
 
@@ -153,6 +156,7 @@ def contact():
   <span>© <span id="yr">2026</span> Radhika Atolia · Product designer</span>
   <span><a href="{BEHANCE}" target="_blank" rel="noopener">Behance</a><a href="{LINKEDIN}" target="_blank" rel="noopener">LinkedIn</a><a href="mailto:{EMAIL}">Email</a><a href="{RESUME_NAV}" target="_blank" rel="noopener">Resume</a></span>
 </div></footer>
+<button class="totop" aria-label="Back to top">↑</button>
 <script src="script.js"></script>
 </body></html>
 '''
@@ -192,7 +196,7 @@ def build_index():
 <section class="hero" id="top"><div class="hero__bg"><i class="blob b1" data-speed=".08"></i><i class="blob b2" data-speed=".14"></i><i class="blob b3" data-speed=".05"></i></div>
  <div class="wrap hero__grid">
   <div>
-    <div class="hero__hi"><span class="wave">👋</span>Hello!</div>
+    <div class="hero__hi"><span class="wave">👋</span>Hello! <a class="avail" href="#contact"><i></i>Open to new roles</a></div>
     <h1 data-split>I’m <span class="hl">Radhika,<svg viewBox="0 0 300 20" preserveAspectRatio="none" aria-hidden="true"><path d="M3 14 C 60 2, 110 20, 160 9 S 260 4, 297 12"/></svg></span> a product designer.</h1>
     <p class="hero__sub" data-reveal="up" style="--i:5">I enjoy figuring out what isn't working, making sense of messy problems, and turning them into simple, useful experiences.</p>
     <div class="hero__cta" data-reveal="up" style="--i:7"><a class="btn" href="work.html"><span>See my work</span><span class="arr">→</span></a><a class="btn btn--ghost" href="about.html"><span>About me</span></a></div>
@@ -318,24 +322,30 @@ def build_about():
 def case_page(p, i, sections, subtitle, tags_extra=None):
     prev = PROJECTS[(i - 1) % len(PROJECTS)]; nxt = PROJECTS[(i + 1) % len(PROJECTS)]
     tags = "".join(f"<li>{t}</li>" for t in p["tags"])
-    toc = "".join(f'<a href="#{sid}">{lab}</a>' for sid, lab, _ in sections) + '<a href="#deck">Full case study (HD)</a>'
-    body = "".join(f'<section class="cs-sec" id="{sid}">{h}</section>' for sid, _, h in sections)
+    labels = [(sid, lab) for sid, lab, _ in sections] + [("deck", "Full case study (HD)")]
+    toc_links = "".join(f'<a href="#{sid}"><em>{n+1:02d}</em><span>{lab}</span></a>' for n, (sid, lab) in enumerate(labels))
+    toc = (f'<aside class="toc" aria-label="On this page"><p class="toc__t">On this page</p>'
+           f'<div class="toc__list"><i class="toc__bar"><b></b></i>{toc_links}</div>'
+           f'<div class="toc__foot"><a href="work.html">← All work</a><a href="{p["behance"]}" target="_blank" rel="noopener">View on Behance ↗</a></div></aside>')
+    tocbar = '<nav class="tocbar" aria-label="Sections">' + "".join(f'<a href="#{sid}">{lab}</a>' for sid, lab in labels) + '</nav>'
+    body = "".join(f'<section class="cs-sec" id="{sid}" data-no="{n+1:02d}">{h}</section>' for n, (sid, _, h) in enumerate(sections))
     slabs = "".join(shot(d, f"{p['cs_title']} — {n+1}", p["slug"], "bare" if False else "") for n, d in enumerate(p["deck"]))
     mbg = edge_color(p["cover"])
     out = head(f"{p['cs_title']} — Radhika Atolia", p["blurb"], og=f"{SITE}/{p['cover']}") + nav("work")
     out += f'''<article>
-<section class="cs-hero"><div class="wrap">
+<section class="cs-hero" style="--pc:{p['bg']}"><div class="wrap">
  <span class="eyebrow" data-reveal="up">Case study · {p['year']}</span>
  <h1 data-split>{html.escape(p['cs_title'])}</h1>
  <p class="lead" data-reveal="up" style="--i:3">{subtitle}</p>
  <ul class="tags" data-reveal="up" style="--i:4;margin-top:22px">{tags}</ul>
+ <p data-reveal="up" style="--i:5;display:flex;gap:12px;flex-wrap:wrap;margin:26px 0 0"><a class="btn" href="#deck"><span>Jump to the HD boards</span><span class="arr">↓</span></a><a class="btn btn--ghost" href="{p['behance']}" target="_blank" rel="noopener"><span>View on Behance</span><span class="arr">↗</span></a></p>
  <div class="cs-cover" data-tilt="3" data-reveal="scale"><div class="cs-cover__in" data-tilt-in style="background:{mbg}">{img(p['cover'], p['cs_title'], eager=True)}</div></div>
  <div class="meta" data-reveal="up"><div><small>My role</small><b>{p['role']}</b></div><div><small>Timeline</small><b>{p['timeline']}</b></div><div><small>Team</small><b>{p['team']}</b></div><div><small>Tools</small><b>{p['tools']}</b></div></div>
 </div></section>
-<div class="wrap"><div class="cs-layout">
- <nav class="toc" aria-label="On this page">{toc}</nav>
+<div class="wrap">{tocbar}<div class="cs-layout">
+ {toc}
  <div class="cs-body">{body}
-  <section class="cs-sec slabs" id="deck"><span class="eyebrow">Full case study</span><h2>The whole story, in HD</h2>
+  <section class="cs-sec slabs" id="deck" data-no="{len(sections)+1:02d}"><span class="eyebrow">Full case study</span><h2>The whole story, in HD</h2>
    <p>Every board from the Behance case study — tap any image to open it full screen, then use ← → to move through.</p>{slabs}
    <p style="display:flex;gap:14px;flex-wrap:wrap;margin-top:30px"><a class="btn btn--orange" href="{p['behance']}" target="_blank" rel="noopener"><span>View on Behance</span><span class="arr">↗</span></a><a class="btn btn--ghost" href="{BEHANCE}" target="_blank" rel="noopener"><span>All projects on Behance</span></a></p>
    <p style="font-family:var(--mono);font-size:12px;color:var(--muted);letter-spacing:.06em">Published {p['pub']} · {p['fields']} · {p['stats'][0]} appreciations · {p['stats'][1]} views on Behance</p>
