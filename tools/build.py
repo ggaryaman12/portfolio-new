@@ -97,12 +97,14 @@ PROJECTS = [
       fields="Graphic Design · Illustration", stats=(17, 170),
       role="Illustrator", timeline="Personal project", team="Solo project", tools="Adobe Illustrator"),
 ]
+TLDR = {'jugnoo-vehicle-branding': ('Verify auto-rickshaw branding every day without losing driver trust.', 'AI video verification, a ₹10 daily payout, a ₹100 reward for every 30-day streak, and fair edge cases (2 attempts a day, 1 skip per 15 days).', 'Incentives are part of the experience — the numbers deserve as much design as the screens.'), 'plant-parents': ('Buying plants online is easy. Keeping them alive isn’t.', 'An end-to-end marketplace: same-day delivery from local nurseries plus bookable plant-care experts — research, personas, IA, responsive hi-fi UI.', 'People don’t just want a product, they want reassurance and a feeling of success.'), 'connect-b2b-feedback': ('Star ratings can’t ask the specific questions a business actually needs answered.', 'A feedback-form builder inside Growth Score: reusable templates, scoring, and email campaigns — in 8 weeks with 2 developers and a team lead.', 'Estimated potential: 10–15% churn reduction and 5–15% annual revenue uplift.'), 'wellspring-healthcare': ('Managing your health takes a backseat in a fast-paced life.', 'A single hub to track symptoms, schedule appointments and manage medications — taken from discovery through to testing.', 'User needs over aesthetics. Iterate. Less is more.'), 'blue-pottery': ('Blue pottery is treated as a delicate showpiece.', 'Motifs, patterns and a six-colour palette turned into everyday objects: jewelry box, table clocks, coffee mugs, gifting boxes.', 'Beautiful and practical can be the same thing.'), 'elementals-poster': ('A fan poster for Disney Pixar’s Elemental.', '“Opposites react” — water meets fire, illustrated in Adobe Illustrator with a Devanagari title.', 'A small, fun craft piece.')}
 for p in PROJECTS:
+    p["tldr"] = TLDR[p["slug"]]
     p["deck"] = sorted(glob.glob(f"assets/behance/{p['slug']}/*"))
 
 # --------------------------------------------------------------- shared
-CURTAIN = '''<div class="curtain" aria-hidden="true"><span class="curtain__tag">Radhika Atolia · Product Designer</span><p class="curtain__q"></p><span class="curtain__sub"></span><i class="curtain__bar"></i></div>
-<script>(function(){var Q=[["Pixels are just tiny opinions.","— a designer, probably"],["Ctrl+Z works on designs. Not on Mondays.","— every designer, Monday"],["No users were harmed in the making of this portfolio.","— legal, unofficially"],["Lorem ipsum dolor sit… hire me.","— the placeholder text"],["Hold on, let me ChatGPT this.","— a sticker I own"],["final_final_v7 is a design methodology.","— my Figma files"],["Making messy problems simple. On purpose.","— Radhika"],["This button was 2px off. I fixed it. You’re welcome.","— nobody noticed"],["Kerning is my cardio.","— Radhika, mid-sprint"],["Hiring a designer: 10/10 would recommend.","— everyone who did"],["It’s not a bug. It’s an unresearched feature.","— a developer, nervous"],["Good design is invisible. Great design buys you coffee.","— boba, actually"],["I put the ‘fun’ in ‘functional requirements’.","— LinkedIn, humbly"],["Loading… still faster than a 5-step signup.","— drivers, unanimously"],["Two attempts a day. Zero excuses. One streak.","— the Jugnoo system"]];var k='rq',l=+sessionStorage.getItem(k);var i;do{i=Math.floor(Math.random()*Q.length)}while(i===l&&Q.length>1);try{sessionStorage.setItem(k,i)}catch(e){}window.__Q=Q;var c=document.currentScript.previousElementSibling;c.querySelector('.curtain__q').textContent=Q[i][0];c.querySelector('.curtain__sub').textContent=Q[i][1];})();</script>'''
+CURTAIN = '''<div class="curtain" aria-hidden="true"><span class="curtain__tag">Radhika Atolia</span><p class="curtain__q"></p><i class="curtain__bar"></i></div>
+<script>(function(){var Q=["Pixels are just tiny opinions.","Ctrl+Z works on designs. Not on Mondays.","Lorem ipsum dolor sit… hire me.","Hold on, let me ChatGPT this.","final_final_v7 is a design methodology.","Making messy problems simple. On purpose.","This button was 2px off. Fixed it. You’re welcome.","Kerning is my cardio.","Hiring a designer: 10/10, would recommend.","It’s not a bug. It’s an unresearched feature.","Loading… still faster than a 5-step signup.","I put the ‘fun’ in ‘functional requirements’.","No users were harmed making this portfolio.","Two attempts a day. Zero excuses."];var l=+sessionStorage.getItem('rq'),n=sessionStorage.getItem('nq'),i;if(n!==null&&Q[+n]){i=+n}else{do{i=Math.floor(Math.random()*Q.length)}while(i===l)}try{sessionStorage.setItem('rq',i);sessionStorage.removeItem('nq')}catch(e){}window.__Q=Q;document.currentScript.previousElementSibling.querySelector('.curtain__q').textContent=Q[i];})();</script>'''
 
 def head(title, desc, page="", og=None):
     og = og or f"{SITE}/assets/og.jpg"
@@ -156,6 +158,13 @@ def contact():
   <span>© <span id="yr">2026</span> Radhika Atolia · Product designer</span>
   <span><a href="{BEHANCE}" target="_blank" rel="noopener">Behance</a><a href="{LINKEDIN}" target="_blank" rel="noopener">LinkedIn</a><a href="mailto:{EMAIL}">Email</a><a href="{RESUME_NAV}" target="_blank" rel="noopener">Resume</a></span>
 </div></footer>
+<div class="hire"><button class="hire__b" aria-expanded="false"><i></i>Hire Radhika</button>
+ <div class="hire__m"><p>Let’s make something clear &amp; kind.</p>
+  <button class="copy" data-copy="{EMAIL}">{EMAIL} <span>copy</span></button>
+  <a href="{RESUME_DL}" target="_blank" rel="noopener">Download resume ↓</a>
+  <a href="{BEHANCE}" target="_blank" rel="noopener">Behance ↗</a>
+  <a href="{LINKEDIN}" target="_blank" rel="noopener">LinkedIn ↗</a></div></div>
+<div class="toast" role="status"></div>
 <button class="totop" aria-label="Back to top">↑</button>
 <script src="script.js"></script>
 </body></html>
@@ -198,6 +207,7 @@ def build_index():
   <div>
     <div class="hero__hi"><span class="wave">👋</span>Hello! <a class="avail" href="#contact"><i></i>Open to new roles</a></div>
     <h1 data-split>I’m <span class="hl">Radhika,<svg viewBox="0 0 300 20" preserveAspectRatio="none" aria-hidden="true"><path d="M3 14 C 60 2, 110 20, 160 9 S 260 4, 297 12"/></svg></span> a product designer.</h1>
+    <p class="hero__rot" data-reveal="up" style="--i:4">Lately I’ve been <b class="rot" data-words="shipping across 5 live products|turning driver rules into fair incentives|making plant care less panicky|designing feedback forms people finish|drawing stickers on the side"></b></p>
     <p class="hero__sub" data-reveal="up" style="--i:5">I enjoy figuring out what isn't working, making sense of messy problems, and turning them into simple, useful experiences.</p>
     <div class="hero__cta" data-reveal="up" style="--i:7"><a class="btn" href="work.html"><span>See my work</span><span class="arr">→</span></a><a class="btn btn--ghost" href="about.html"><span>About me</span></a></div>
   </div>
@@ -243,6 +253,17 @@ def build_index():
    <h2 class="serif-title" style="margin:18px 0 24px" data-split>Hii! I’m Radhika.</h2>
    <p class="lead" data-reveal="up" style="--i:2">A product designer focused on creating thoughtful, well structured digital experiences. With 2.5+ years of experience designing scalable B2B SaaS products. Skilled in AI-assisted design workflows to accelerate exploration and iteration. Currently designing Jugnoo.</p>
    <p style="margin-top:28px;--i:3" data-reveal="up"><a class="btn" href="about.html"><span>More about me</span><span class="arr">→</span></a></p></div>
+</div></section>
+
+<section class="sec why"><div class="wrap">
+  <span class="eyebrow" data-reveal="up">Why me</span>
+  <h2 class="serif-title" style="margin:18px 0 0" data-split>What your team gets <em>on day one</em></h2>
+  <div class="cards4" style="margin-top:40px" data-stagger>
+   <div class="card" data-tilt="6"><span class="n">01</span><b>Simpler complex flows</b><p>Breaks multi-step processes into guided, reversible steps — like the Connect form builder, where users can edit, delete and go back without starting over.</p></div>
+   <div class="card" data-tilt="6"><span class="n">02</span><b>Fairness &amp; trust by design</b><p>Rules built around real scenarios, not ideal ones — at Jugnoo a genuine miss doesn’t feel like a punishment, so drivers stay.</p></div>
+   <div class="card" data-tilt="6"><span class="n">03</span><b>Consistency at scale</b><p>Led UX across On-Demand, Driver, Carpool and Car Rental — five live products that feel like one ecosystem.</p></div>
+   <div class="card" data-tilt="6"><span class="n">04</span><b>Faster exploration, with AI</b><p>AI-assisted workflows for exploration and iteration, with human judgement kept on the decisions that matter.</p></div>
+  </div>
 </div></section>
 ''' + contact()
     open("index.html", "w", encoding="utf8").write(out)
@@ -341,6 +362,7 @@ def case_page(p, i, sections, subtitle, tags_extra=None):
  <p data-reveal="up" style="--i:5;display:flex;gap:12px;flex-wrap:wrap;margin:26px 0 0"><a class="btn" href="#deck"><span>Jump to the HD boards</span><span class="arr">↓</span></a><a class="btn btn--ghost" href="{p['behance']}" target="_blank" rel="noopener"><span>View on Behance</span><span class="arr">↗</span></a></p>
  <div class="cs-cover" data-tilt="3" data-reveal="scale"><div class="cs-cover__in" data-tilt-in style="background:{mbg}">{img(p['cover'], p['cs_title'], eager=True)}</div></div>
  <div class="meta" data-reveal="up"><div><small>My role</small><b>{p['role']}</b></div><div><small>Timeline</small><b>{p['timeline']}</b></div><div><small>Team</small><b>{p['team']}</b></div><div><small>Tools</small><b>{p['tools']}</b></div></div>
+ <div class="tldr" data-reveal="up"><span class="tldr__tag">TL;DR for busy humans</span><div><small>The problem</small><p>{p['tldr'][0]}</p></div><div><small>What I did</small><p>{p['tldr'][1]}</p></div><div><small>Takeaway</small><p>{p['tldr'][2]}</p></div></div>
 </div></section>
 <div class="wrap">{tocbar}<div class="cs-layout">
  {toc}
