@@ -10,7 +10,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/png" href="assets/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Fragment+Mono&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700&family=Parkinsans:wght@400;500;600;700&family=Fragment+Mono&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -24,16 +24,10 @@
 </div></header>
 
 <section class="hero" id="top">
-  <div class="hero__bg">
-    <div class="star star-1">✨</div>
-    <div class="star star-2">✨</div>
-    <div class="star star-3">✨</div>
-    <div class="star star-4">✨</div>
-    <div class="star star-5">✨</div>
-  </div>
   <div class="wrap hero__grid">
     <div>
-      <h1 data-split>I'm <span class="hl">Radhika,<svg viewBox="0 0 300 20" preserveAspectRatio="none" aria-hidden="true"><path d="M3 14 C 60 2, 110 20, 160 9 S 260 4, 297 12"/></svg></span> a product designer.</h1>
+      <h1 class="hero__greeting" data-split>Hello I am <span class="hl">Radhika</span></h1>
+      <p class="hero__title" data-split>a product designer.</p>
       <p class="hero__sub" data-reveal="up" style="--i:5">I enjoy figuring out what isn't working, making sense of messy problems, and turning them into simple, useful experiences.</p>
       <div class="hero__cta" data-reveal="up" style="--i:7"><a class="btn" href="work.html"><span>See my work</span><span class="arr">→</span></a><a class="btn btn--ghost" href="about.html"><span>About me</span></a></div>
     </div>
@@ -130,7 +124,12 @@
   <h2 class="footer__title">Let's Connect</h2>
   <div class="footer__email">
     <span class="email-text">radhikaselement@gmail.com</span>
-    <button class="email-copy" title="Copy email">📋</button>
+    <button class="email-copy" title="Copy email" aria-label="Copy email">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+        <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+      </svg>
+    </button>
   </div>
   <div class="footer__links">
     <a href="https://www.linkedin.com/in/radhikaatolia/" target="_blank" rel="noopener">LinkedIn</a>

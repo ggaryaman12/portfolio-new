@@ -7,7 +7,7 @@
   --teal:#1B6B6F; --teal-d:#12494c; --orange:#F76C5E; --peach:#FFD9C7; --butter:#F6C453;
   --lilac:#B58BD6; --sky:#CADCFC; --rose:#F4A38C; --blue:#0000EE;
   --line:rgba(46,46,46,.12);
-  --serif:'Poppins',system-ui,sans-serif; --sans:'Inter',system-ui,sans-serif; --mono:'Fragment Mono',ui-monospace,monospace;
+  --serif:'Bricolage Grotesque',system-ui,sans-serif; --sans:'Parkinsans',system-ui,sans-serif; --mono:'Fragment Mono',ui-monospace,monospace;
   --r-s:12px; --r-m:20px; --r-l:32px; --r-xl:44px;
   --ease:cubic-bezier(.22,1,.36,1); --ease-io:cubic-bezier(.65,0,.35,1);
   --wrap:1240px; --gut:clamp(18px,4vw,48px);
@@ -458,15 +458,25 @@ body.ready .curtain>*{opacity:0;transform:translateY(-14px)}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 @media(max-width:560px){.hire{left:12px;bottom:12px}.hire__b{padding:12px 16px;font-size:14px}.totop{right:12px;bottom:12px}}
 
+/* hero updates -------------------------------------------------- */
+.hero__greeting{font-family:var(--serif);font-weight:700;font-size:clamp(36px,7vw,72px);line-height:1.1;color:var(--ink);margin-bottom:0}
+.hero__title{font-family:var(--serif);font-weight:700;font-size:clamp(36px,7vw,72px);line-height:1.1;color:var(--orange);margin:0 0 24px}
+.hl{color:var(--orange);font-style:italic}
+
+/* photo hover animation -------------------------------------------------- */
+.stage:hover .layer:not(.me){animation:float-animation .6s ease-in-out}
+@keyframes float-animation{0%,100%{transform:translateY(0);opacity:1}50%{transform:translateY(-8px);opacity:0.8}}
+
 /* footer -------------------------------------------------- */
 .footer{background:var(--ink);color:var(--cream);padding:80px var(--gut) 40px;text-align:center}
 .footer__title{font-family:var(--serif);font-weight:700;font-size:clamp(28px,5vw,48px);margin-bottom:30px;color:#fff}
 .footer__email{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:40px;font-size:16px}
-.email-text{color:var(--cream);font-weight:500}
-.email-copy{background:none;border:none;cursor:pointer;font-size:20px;transition:transform .3s}
-.email-copy:hover{transform:scale(1.2)}
+.email-text{color:var(--cream);font-weight:500;font-family:var(--sans)}
+.email-copy{background:none;border:none;cursor:pointer;width:24px;height:24px;color:var(--cream);transition:all .3s;display:flex;align-items:center;justify-content:center}
+.email-copy svg{width:20px;height:20px;stroke:currentColor}
+.email-copy:hover{color:var(--orange);transform:scale(1.15)}
 .footer__links{display:flex;justify-content:center;gap:16px;margin-bottom:30px;flex-wrap:wrap}
-.footer__links a{color:var(--cream);text-decoration:none;font-weight:500;transition:color .3s}
+.footer__links a{color:var(--cream);text-decoration:none;font-weight:500;font-family:var(--sans);transition:color .3s}
 .footer__links a:hover{color:var(--orange)}
 .dot{color:rgba(248,246,243,.5)}
-.footer__note{font-size:13px;color:rgba(248,246,243,.7);margin:0}
+.footer__note{font-size:13px;color:rgba(248,246,243,.7);margin:0;font-family:var(--sans)}
