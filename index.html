@@ -10,7 +10,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/png" href="assets/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Fragment+Mono&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Fragment+Mono&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -18,7 +18,7 @@
 <script>(function(){var Q=["Pixels are just tiny opinions.","Ctrl+Z works on designs. Not on Mondays.","Lorem ipsum dolor sit… hire me.","Hold on, let me ChatGPT this.","final_final_v7 is a design methodology.","Making messy problems simple. On purpose.","This button was 2px off. Fixed it. You're welcome.","Kerning is my cardio.","Hiring a designer: 10/10, would recommend.","It's not a bug. It's an unresearched feature.","Loading… still faster than a 5-step signup.","I put the 'fun' in 'functional requirements'.","No users were harmed making this portfolio.","Two attempts a day. Zero excuses."];var l=+sessionStorage.getItem('rq'),n=sessionStorage.getItem('nq'),i;if(n!==null&&Q[+n]){i=+n}else{do{i=Math.floor(Math.random()*Q.length)}while(i===l)}try{sessionStorage.setItem('rq',i);sessionStorage.removeItem('nq')}catch(e){}window.__Q=Q;document.currentScript.previousElementSibling.querySelector('.curtain__q').textContent=Q[i];})();</script>
 <div class="progress"><i></i></div>
 <header class="nav"><div class="nav__inner">
-  <a href="index.html" class="nav__brand"><img src="assets/favicon.png" alt="" width="26" height="26">Radhika</a>
+  <a href="index.html" class="nav__brand">Radhika</a>
   <nav class="nav__links"><a href="work.html">Work</a><a href="about.html">About</a><a href="https://drive.google.com/file/d/1pv8k1CAcRjwX_YjblszEcznRyadkhXmi/view?usp=sharing" target="_blank" rel="noopener">Resume</a></nav>
   <button class="nav__toggle" aria-label="Menu">☰</button>
 </div></header>
@@ -127,13 +127,39 @@
 </div></section>
 
 <footer class="footer"><div class="wrap">
-  <p class="footer__note">Time is precious — thanks for spending a little of yours here.</p>
-  <p class="footer__brand">Radhika Atolia · © <span id="yr"></span></p>
+  <h2 class="footer__title">Let's Connect</h2>
+  <div class="footer__email">
+    <span class="email-text">radhikaselement@gmail.com</span>
+    <button class="email-copy" title="Copy email">📋</button>
+  </div>
+  <div class="footer__links">
+    <a href="https://www.linkedin.com/in/radhikaatolia/" target="_blank" rel="noopener">LinkedIn</a>
+    <span class="dot">•</span>
+    <a href="https://www.behance.net/radhikaselement" target="_blank" rel="noopener">Behance</a>
+    <span class="dot">•</span>
+    <a href="https://drive.google.com/file/d/1pv8k1CAcRjwX_YjblszEcznRyadkhXmi/view?usp=sharing" target="_blank" rel="noopener">Resume</a>
+  </div>
+  <p class="footer__note">Radhika Atolia · © <span id="yr"></span></p>
 </div></footer>
 
 <script src="script.js"></script>
 <script>
 document.getElementById('yr').textContent = new Date().getFullYear();
+
+// Email copy functionality
+const emailCopyBtn = document.querySelector('.email-copy');
+const emailText = document.querySelector('.email-text');
+if (emailCopyBtn) {
+  emailCopyBtn.addEventListener('click', () => {
+    const email = 'radhikaselement@gmail.com';
+    navigator.clipboard.writeText(email).then(() => {
+      emailCopyBtn.textContent = '✓';
+      setTimeout(() => {
+        emailCopyBtn.textContent = '📋';
+      }, 2000);
+    });
+  });
+}
 </script>
 </body>
 </html>
