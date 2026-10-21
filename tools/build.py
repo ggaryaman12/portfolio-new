@@ -17,7 +17,9 @@ from content import INTRO, IMPACT
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 os.chdir(ROOT)
 
-SITE = "https://radhikaatolia.website"
+# Must be the host that serves 200 directly: the bare domain 308-redirects to
+# www, and social scrapers do not follow redirects when fetching og:image.
+SITE = "https://www.radhikaatolia.website"
 EMAIL = "radhikaselement@gmail.com"
 GMAIL = ("https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=radhikaselement@gmail.com"
          "&amp;su=Hii%20Radhika%2C%20we%20would%20like%20to%20discuss%20your%20availability!")
@@ -120,8 +122,29 @@ for p in PROJECTS:
 CURTAIN = '''<div class="curtain" aria-hidden="true"><span class="curtain__tag">Radhika Atolia</span><p class="curtain__q"></p><i class="curtain__bar"></i></div>
 <script>(function(){var Q=["Pixels are just tiny opinions.","Ctrl+Z works on designs. Not on Mondays.","Lorem ipsum dolor sit… hire me.","Hold on, let me ChatGPT this.","final_final_v7 is a design methodology.","Making messy problems simple. On purpose.","This button was 2px off. Fixed it. You’re welcome.","Kerning is my cardio.","Hiring a designer: 10/10, would recommend.","It’s not a bug. It’s an unresearched feature.","Loading… still faster than a 5-step signup.","I put the ‘fun’ in ‘functional requirements’.","No users were harmed making this portfolio.","Two attempts a day. Zero excuses."];var l=+sessionStorage.getItem('rq'),n=sessionStorage.getItem('nq'),i;if(n!==null&&Q[+n]){i=+n}else{do{i=Math.floor(Math.random()*Q.length)}while(i===l)}try{sessionStorage.setItem('rq',i);sessionStorage.removeItem('nq')}catch(e){}window.__Q=Q;document.currentScript.previousElementSibling.querySelector('.curtain__q').textContent=Q[i];})();</script>'''
 
-def head(title, desc, page="", og=None):
-    og = og or f"{SITE}/assets/og.jpg"
+def og_card(p):
+    """A 1200x630 JPEG preview per project.
+
+    The project covers are webp, and WhatsApp/LinkedIn do not reliably render
+    webp previews, so flatten each cover onto its brand colour once at build
+    time and point og:image at the jpeg instead."""
+    os.makedirs("assets/og", exist_ok=True)
+    out = f"assets/og/{p['slug']}.jpg"
+    if (not os.path.exists(out)
+            or os.path.getmtime(out) < os.path.getmtime(p["cover"])):
+        W, H = 1200, 630
+        canvas = Image.new("RGB", (W, H), p["bg"])
+        im = Image.open(p["cover"]).convert("RGBA")
+        im.thumbnail((W - 90, H - 90), Image.LANCZOS)
+        canvas.paste(im, ((W - im.width) // 2, (H - im.height) // 2), im)
+        canvas.save(out, "JPEG", quality=86, optimize=True)
+    return out
+
+def head(title, desc, page="", og_path="assets/og.jpg"):
+    """`page` is the clean URL path: "" for home, "work", "case-jugnoo"."""
+    og = f"{SITE}/{og_path}"
+    w, h = dims(og_path)
+    url = f"{SITE}/{page}" if page else f"{SITE}/"
     return f'''<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -130,8 +153,10 @@ def head(title, desc, page="", og=None):
 <meta name="theme-color" content="#F8F6F3">
 <title>{html.escape(title)}</title>
 <meta name="description" content="{html.escape(desc)}">
-<meta property="og:type" content="website"><meta property="og:title" content="{html.escape(title)}"><meta property="og:description" content="{html.escape(desc)}"><meta property="og:image" content="{og}">
-<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="{url}">
+<meta property="og:type" content="website"><meta property="og:site_name" content="Radhika Atolia"><meta property="og:url" content="{url}"><meta property="og:title" content="{html.escape(title)}"><meta property="og:description" content="{html.escape(desc)}">
+<meta property="og:image" content="{og}"><meta property="og:image:secure_url" content="{og}"><meta property="og:image:type" content="image/jpeg"><meta property="og:image:width" content="{w}"><meta property="og:image:height" content="{h}"><meta property="og:image:alt" content="{html.escape(title)}">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="{html.escape(title)}"><meta name="twitter:description" content="{html.escape(desc)}"><meta name="twitter:image" content="{og}">
 <link rel="icon" type="image/png" href="assets/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700&family=Parkinsans:wght@400;500;600;700&family=Fragment+Mono&display=swap" rel="stylesheet">
@@ -242,7 +267,7 @@ def build_index():
     cards = "\n".join(card(p, i) for i, p in enumerate(PROJECTS))
     ticker = ["Product Design", "B2B SaaS", "User Research", "Flow Design", "Wireframes", "Prototyping", "High-fidelity UI", "Usability Testing", "Illustration", "Figma"]
     tk = "".join(f"<span>{t}</span>" for t in ticker * 2)
-    out = head("Radhika Atolia — Product Designer", "Hi, I am a Product designer - I design digital experiences", "home") + nav()
+    out = head("Radhika Atolia — Product Designer", "Hi, I am a Product designer - I design digital experiences") + nav()
     out += f'''
 <section class="hero" id="top"><div class="hero__bg"><i class="blob b1" data-speed=".08"></i><i class="blob b2" data-speed=".14"></i><i class="blob b3" data-speed=".05"></i></div>
  <div class="wrap hero__grid">
@@ -405,7 +430,8 @@ def case_page(p, i, subtitle):
     boards = "".join(shot(d, f"{p['cs_title']} — board {n+1}", p["slug"])
                      for n, d in enumerate(p["boards"]))
     mbg = edge_color(p["cover"])
-    out = head(f"{p['cs_title']} — Radhika Atolia", p["blurb"], og=f"{SITE}/{p['cover']}") + nav("work")
+    out = head(f"{p['cs_title']} — Radhika Atolia", p["blurb"],
+               page=p["page"].replace(".html", ""), og_path=og_card(p)) + nav("work")
     out += f'''<article>
 <section class="cs-hero" style="--pc:{p['bg']}"><div class="wrap">
  <span class="eyebrow" data-reveal="up">Case study · {p['year']}</span>
