@@ -407,16 +407,11 @@ section{position:relative}
 body.lock{overflow:hidden}
 
 /* shutter transition ---------------------------------------------- */
-.curtain{display:none}
-.curtain>*{transition:opacity .3s,transform .4s var(--ease)}
-body.ready .curtain>*{opacity:0;transform:translateY(-14px)}
-.curtain__tag{position:absolute;top:26px;left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:rgba(248,246,243,.5);white-space:nowrap}
-.curtain__q{font-family:var(--serif);font-style:italic;font-weight:400;font-size:clamp(26px,4.6vw,60px);line-height:1.18;max-width:19ch;margin:0;letter-spacing:-.01em}
-.curtain__q::before{content:"“";color:var(--orange)}.curtain__q::after{content:"”";color:var(--orange)}
-.curtain__bar{position:absolute;left:0;bottom:0;height:3px;width:100%;background:var(--orange);transform-origin:left;animation:cbar 1.1s linear forwards}
-@keyframes cbar{from{transform:scaleX(0)}to{transform:scaleX(1)}}
-
-.noscript .curtain{display:none}
+.curtain{display:none!important}
+.curtain>*{display:none!important}
+.curtain__tag{display:none!important}
+.curtain__q{display:none!important}
+.curtain__bar{display:none!important}
 
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
