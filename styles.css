@@ -393,9 +393,6 @@ section{position:relative}
 .cpanel .btn--ghost{--bg:transparent;--fg:#fff;border-color:rgba(255,255,255,.7)}
 .cpanel .sk{position:absolute;right:clamp(10px,4vw,70px);bottom:clamp(10px,4vw,60px);width:clamp(120px,18vw,250px);transform:translateZ(80px) rotate(8deg);filter:drop-shadow(0 20px 24px rgba(0,0,0,.35))}
 @media(max-width:700px){.cpanel .sk{opacity:.25}}
-.footer{padding:30px 0 50px;color:var(--muted);font-size:14px}
-.footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px}
-.footer a{text-decoration:none;margin-right:18px;font-weight:600;color:var(--ink)}.footer a:hover{color:var(--orange)}
 
 /* lightbox -------------------------------------------------------- */
 .lb{position:fixed;inset:0;z-index:300;background:rgba(18,10,5,.94);display:none;align-items:center;justify-content:center;opacity:0;transition:opacity .35s}
