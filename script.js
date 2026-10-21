@@ -105,10 +105,8 @@ $$('.nav__links a').forEach(function(a){a.addEventListener('click',function(){na
 
 /* magnetic buttons + tilt ---------------------------------- */
 if(fine&&!reduce){
-  $$('.btn').forEach(function(b){
-    b.addEventListener('mousemove',function(e){var r=b.getBoundingClientRect();b.style.transform='translate('+((e.clientX-r.left-r.width/2)*.18)+'px,'+((e.clientY-r.top-r.height/2)*.28)+'px)'});
-    b.addEventListener('mouseleave',function(){b.style.transform=''});
-  });
+  /* no magnetic drift on .btn: the button system's hover state is the hard
+     offset shadow, and an inline transform would slide the pill off it. */
   $$('[data-tilt]').forEach(function(el){
     var max=parseFloat(el.dataset.tilt)||8,tgt=el.querySelector('[data-tilt-in]')||el;
     el.addEventListener('mousemove',function(e){var r=el.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;
@@ -206,7 +204,17 @@ $$('.rot').forEach(function(el){var w=el.dataset.words.split('|'),i=0,txt='',del
 });
 /* hire widget + copy email ------------------------------------------ */
 var hire=$('.hire'),toast=$('.toast'),tt;
-function say(m){toast.textContent=m;toast.classList.add('show');clearTimeout(tt);tt=setTimeout(function(){toast.classList.remove('show')},2600)}
+function say(m){
+  if(!toast){toast=document.createElement('div');toast.className='toast';toast.setAttribute('role','status');document.body.appendChild(toast)}
+  toast.textContent=m;toast.classList.add('show');clearTimeout(tt);tt=setTimeout(function(){toast.classList.remove('show')},2600)}
+/* footer copy-email. Lives here so every page shares one implementation, and
+   so the icon is left intact (setting textContent would delete the svg). */
+$$('.email-copy').forEach(function(b){
+  var mail=(($('.email-text',b.parentNode)||{}).textContent||'').trim()||'radhikaselement@gmail.com';
+  b.addEventListener('click',function(){
+    (navigator.clipboard?navigator.clipboard.writeText(mail):Promise.reject())
+      .then(function(){say('Copied '+mail)},function(){location.href='mailto:'+mail})});
+});
 if(hire){$('.hire__b',hire).addEventListener('click',function(e){e.stopPropagation();var o=hire.classList.toggle('open');this.setAttribute('aria-expanded',o)});
   document.addEventListener('click',function(e){if(!hire.contains(e.target))hire.classList.remove('open')});
   document.addEventListener('keydown',function(e){if(e.key==='Escape')hire.classList.remove('open')});

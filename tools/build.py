@@ -1,13 +1,23 @@
 #!/usr/bin/env python3
-"""Generates every page of the site. Run from repo root: python3 tools/build.py
+"""Generates the case-study pages. Run from repo root: python3 tools/build.py
+
+IMPORTANT — index.html, work.html and about.html are hand-maintained now.
+They were edited directly in the repo and this script's templates for them are
+stale, so a full build would REVERT that work. Those three are therefore opt-in:
+
+    python3 tools/build.py          -> case-*.html only            (safe)
+    python3 tools/build.py --all    -> also index/work/about       (reverts edits)
+
 Content sources: Radhika's Framer site + Behance profile (see CONTENT-NOTES.md)."""
-import os, glob, html
+import os, sys, glob, html
 from PIL import Image
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from content import INTRO, IMPACT
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 os.chdir(ROOT)
 
-SITE = "https://radhikaatolia.vercel.app"
+SITE = "https://radhikaatolia.website"
 EMAIL = "radhikaselement@gmail.com"
 GMAIL = ("https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=radhikaselement@gmail.com"
          "&amp;su=Hii%20Radhika%2C%20we%20would%20like%20to%20discuss%20your%20availability!")
@@ -100,7 +110,11 @@ PROJECTS = [
 TLDR = {'jugnoo-vehicle-branding': ('Verify auto-rickshaw branding every day without losing driver trust.', 'AI video verification, a ₹10 daily payout, a ₹100 reward for every 30-day streak, and fair edge cases (2 attempts a day, 1 skip per 15 days).', 'Incentives are part of the experience — the numbers deserve as much design as the screens.'), 'plant-parents': ('Buying plants online is easy. Keeping them alive isn’t.', 'An end-to-end marketplace: same-day delivery from local nurseries plus bookable plant-care experts — research, personas, IA, responsive hi-fi UI.', 'People don’t just want a product, they want reassurance and a feeling of success.'), 'connect-b2b-feedback': ('Star ratings can’t ask the specific questions a business actually needs answered.', 'A feedback-form builder inside Growth Score: reusable templates, scoring, and email campaigns — in 8 weeks with 2 developers and a team lead.', 'Estimated potential: 10–15% churn reduction and 5–15% annual revenue uplift.'), 'wellspring-healthcare': ('Managing your health takes a backseat in a fast-paced life.', 'A single hub to track symptoms, schedule appointments and manage medications — taken from discovery through to testing.', 'User needs over aesthetics. Iterate. Less is more.'), 'blue-pottery': ('Blue pottery is treated as a delicate showpiece.', 'Motifs, patterns and a six-colour palette turned into everyday objects: jewelry box, table clocks, coffee mugs, gifting boxes.', 'Beautiful and practical can be the same thing.'), 'elementals-poster': ('A fan poster for Disney Pixar’s Elemental.', '“Opposites react” — water meets fire, illustrated in Adobe Illustrator with a Devanagari title.', 'A small, fun craft piece.')}
 for p in PROJECTS:
     p["tldr"] = TLDR[p["slug"]]
+    p["impact"] = IMPACT[p["slug"]]
+    p["intro"] = INTRO[p["slug"]]
     p["deck"] = sorted(glob.glob(f"assets/behance/{p['slug']}/*"))
+    # the cover is reused as board 01 on some projects; don't show it twice
+    p["boards"] = [d for d in p["deck"] if d != p["cover"]]
 
 # --------------------------------------------------------------- shared
 CURTAIN = '''<div class="curtain" aria-hidden="true"><span class="curtain__tag">Radhika Atolia</span><p class="curtain__q"></p><i class="curtain__bar"></i></div>
@@ -120,11 +134,10 @@ def head(title, desc, page="", og=None):
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/png" href="assets/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Fragment+Mono&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700&family=Parkinsans:wght@400;500;600;700&family=Fragment+Mono&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-{CURTAIN}
 <div class="progress"><i></i></div>
 '''
 
@@ -133,10 +146,39 @@ def nav(active=""):
         ac = ' class="active"' if active == k else ""
         return f'<a href="{href}"{ac}>{label}</a>'
     return f'''<header class="nav"><div class="nav__inner">
-  <a href="index.html" class="nav__brand"><img src="assets/favicon.png" alt="" width="26" height="26">Radhika</a>
-  <nav class="nav__links">{a("work.html","Work","work")}{a("about.html","About","about")}<a href="{RESUME_NAV}" target="_blank" rel="noopener">Resume</a><a class="cta" href="#contact">Let’s talk</a></nav>
+  <a href="index.html" class="nav__brand">Radhika</a>
+  <nav class="nav__links">{a("work.html","Work","work")}{a("about.html","About","about")}<a href="{RESUME_NAV}" target="_blank" rel="noopener">Resume</a></nav>
   <button class="nav__toggle" aria-label="Menu">☰</button>
 </div></header>
+'''
+
+def footer():
+    """Matches the hand-maintained footer on index/work/about.
+    Copy-email behaviour lives in script.js, so there is no inline script here."""
+    return f'''<footer class="footer"><div class="wrap">
+  <h2 class="footer__title">Let's Connect</h2>
+  <div class="footer__email">
+    <span class="email-text">{EMAIL}</span>
+    <button class="email-copy" title="Copy email" aria-label="Copy email">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+        <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+      </svg>
+    </button>
+  </div>
+  <div class="footer__links">
+    <a href="{LINKEDIN}" target="_blank" rel="noopener">LinkedIn</a>
+    <span class="dot">•</span>
+    <a href="{BEHANCE}" target="_blank" rel="noopener">Behance</a>
+    <span class="dot">•</span>
+    <a href="{RESUME_NAV}" target="_blank" rel="noopener">Resume</a>
+  </div>
+  <p class="footer__note">Radhika Atolia · © <span id="yr"></span></p>
+</div></footer>
+<button class="totop" aria-label="Back to top">↑</button>
+<div class="toast" role="status"></div>
+<script src="script.js"></script>
+</body></html>
 '''
 
 def contact():
@@ -340,17 +382,28 @@ def build_about():
     open("about.html", "w", encoding="utf8").write(out)
 
 # ---------------------------------------------------------------- case pages
-def case_page(p, i, sections, subtitle, tags_extra=None):
-    prev = PROJECTS[(i - 1) % len(PROJECTS)]; nxt = PROJECTS[(i + 1) % len(PROJECTS)]
+def more_projects(i):
+    """The other five projects, starting from the one after this, in a
+    horizontally scrollable row of cover + name."""
+    others = [PROJECTS[(i + k) % len(PROJECTS)] for k in range(1, len(PROJECTS))]
+    fit = 'style="object-fit:contain"'
+    cards = "".join(
+        '<a class="mcard" href="' + o["page"] + '">'
+        '<span class="mcard__img">' + img(o["cover"], o["cs_title"], extra=fit) + '</span>'
+        '<h3>' + html.escape(o["cs_title"]) + '</h3>'
+        '<small>' + o["year"] + ' · ' + o["tags"][0] + '</small></a>'
+        for o in others)
+    return f'''<section class="more"><div class="wrap">
+  <div class="more__head"><h2 class="serif-title" data-split>More <em>projects</em></h2><a class="ilink" href="work.html">All projects →</a></div>
+  <div class="more__row">{cards}</div>
+</div></section>'''
+
+def case_page(p, i, subtitle):
     tags = "".join(f"<li>{t}</li>" for t in p["tags"])
-    labels = [(sid, lab) for sid, lab, _ in sections] + [("deck", "Full case study (HD)")]
-    toc_links = "".join(f'<a href="#{sid}"><em>{n+1:02d}</em><span>{lab}</span></a>' for n, (sid, lab) in enumerate(labels))
-    toc = (f'<aside class="toc" aria-label="On this page"><p class="toc__t">On this page</p>'
-           f'<div class="toc__list"><i class="toc__bar"><b></b></i>{toc_links}</div>'
-           f'<div class="toc__foot"><a href="work.html">← All work</a><a href="{p["behance"]}" target="_blank" rel="noopener">View on Behance ↗</a></div></aside>')
-    tocbar = '<nav class="tocbar" aria-label="Sections">' + "".join(f'<a href="#{sid}">{lab}</a>' for sid, lab in labels) + '</nav>'
-    body = "".join(f'<section class="cs-sec" id="{sid}" data-no="{n+1:02d}">{h}</section>' for n, (sid, _, h) in enumerate(sections))
-    slabs = "".join(shot(d, f"{p['cs_title']} — {n+1}", p["slug"], "bare" if False else "") for n, d in enumerate(p["deck"]))
+    # Her Behance boards are finished artboards that already carry their own
+    # headings and body copy, so they flow in her order with no added captions.
+    boards = "".join(shot(d, f"{p['cs_title']} — board {n+1}", p["slug"])
+                     for n, d in enumerate(p["boards"]))
     mbg = edge_color(p["cover"])
     out = head(f"{p['cs_title']} — Radhika Atolia", p["blurb"], og=f"{SITE}/{p['cover']}") + nav("work")
     out += f'''<article>
@@ -359,172 +412,46 @@ def case_page(p, i, sections, subtitle, tags_extra=None):
  <h1 data-split>{html.escape(p['cs_title'])}</h1>
  <p class="lead" data-reveal="up" style="--i:3">{subtitle}</p>
  <ul class="tags" data-reveal="up" style="--i:4;margin-top:22px">{tags}</ul>
- <p data-reveal="up" style="--i:5;display:flex;gap:12px;flex-wrap:wrap;margin:26px 0 0"><a class="btn" href="#deck"><span>Jump to the HD boards</span><span class="arr">↓</span></a><a class="btn btn--ghost" href="{p['behance']}" target="_blank" rel="noopener"><span>View on Behance</span><span class="arr">↗</span></a></p>
- <div class="cs-cover" data-tilt="3" data-reveal="scale"><div class="cs-cover__in" data-tilt-in style="background:{mbg}">{img(p['cover'], p['cs_title'], eager=True)}</div></div>
- <div class="meta" data-reveal="up"><div><small>My role</small><b>{p['role']}</b></div><div><small>Timeline</small><b>{p['timeline']}</b></div><div><small>Team</small><b>{p['team']}</b></div><div><small>Tools</small><b>{p['tools']}</b></div></div>
- <div class="tldr" data-reveal="up"><span class="tldr__tag">TL;DR for busy humans</span><div><small>The problem</small><p>{p['tldr'][0]}</p></div><div><small>What I did</small><p>{p['tldr'][1]}</p></div><div><small>Takeaway</small><p>{p['tldr'][2]}</p></div></div>
-</div></section>
-<div class="wrap">{tocbar}<div class="cs-layout">
- {toc}
- <div class="cs-body">{body}
-  <section class="cs-sec slabs" id="deck" data-no="{len(sections)+1:02d}"><span class="eyebrow">Full case study</span><h2>The whole story, in HD</h2>
-   <p>Every board from the Behance case study — tap any image to open it full screen, then use ← → to move through.</p>{slabs}
-   <p style="display:flex;gap:14px;flex-wrap:wrap;margin-top:30px"><a class="btn btn--orange" href="{p['behance']}" target="_blank" rel="noopener"><span>View on Behance</span><span class="arr">↗</span></a><a class="btn btn--ghost" href="{BEHANCE}" target="_blank" rel="noopener"><span>All projects on Behance</span></a></p>
-   <p style="font-family:var(--mono);font-size:12px;color:var(--muted);letter-spacing:.06em">Published {p['pub']} · {p['fields']} · {p['stats'][0]} appreciations · {p['stats'][1]} views on Behance</p>
-  </section>
-  <div class="next"><a href="{prev['page']}"><small>← Previous</small><b>{html.escape(prev['cs_title'])}</b></a><a class="r" href="{nxt['page']}"><small>Next →</small><b>{html.escape(nxt['cs_title'])}</b></a></div>
+ <div class="cs-cover" data-reveal="scale"><div class="cs-cover__in" style="background:{mbg}">{img(p['cover'], p['cs_title'], eager=True)}</div></div>
+ <div class="cs-sum" data-reveal="up">
+  <div class="cs-sum__facts"><div><small>My role</small><b>{p['role']}</b></div><div><small>Timeline</small><b>{p['timeline']}</b></div></div>
+  <dl class="cs-sum__list">
+   <div><dt>The problem</dt><dd>{p['tldr'][0]}</dd></div>
+   <div><dt>What I did</dt><dd>{p['tldr'][1]}</dd></div>
+   <div><dt>Takeaway</dt><dd>{p['tldr'][2]}</dd></div>
+   <div><dt>Impact it created</dt><dd>{p['impact']}</dd></div>
+  </dl>
  </div>
-</div></div>
+ <div class="cs-intro" data-reveal="up"><p>{p['intro']}</p></div>
+</div></section>
+<section class="cs-boards"><div class="wrap">{boards}</div></section>
 </article>
-''' + contact()
+{more_projects(i)}
+''' + footer()
     open(p["page"], "w", encoding="utf8").write(out)
 
-def cards(items, cls="cards3"):
-    return f'<div class="{cls}" data-stagger>' + "".join(
-        f'<div class="card"><span class="n">{n}</span><b>{t}</b><p>{d}</p></div>' for n, t, d in items) + "</div>"
-
 def build_cases():
-    P = {p["slug"]: p for p in PROJECTS}
-
-    # ---------------- Jugnoo (Framer text + assets)
-    p = P["jugnoo-vehicle-branding"]
-    g = "jug"
-    mocks = f'''<div class="mockrow" data-stagger>
- <div class="mock"><div class="grab"></div><h5>Select Upload Options</h5><span class="mb o">Upload from Camera</span><span class="mb o">Upload from Gallery</span><span class="mb o">Cancel</span></div>
- <div class="mock"><h5>Please Wait !</h5><div class="spin"></div><p><b>We are Verifying Your Video</b><br>Our AI is checking your branding video. This usually takes a few seconds.</p><p style="color:#F37F3B!important;margin:0!important">Do not close the app</p></div></div>'''
-    mocks2 = f'''<div class="mockrow" data-stagger>
- <div class="mock"><div class="ok">✓</div><h5>Branding Approved</h5><p>Your vehicle branding has been approved. ₹10 has been credited to your Jugnoo wallet.</p><span class="mb">View Wallet</span></div>
- <div class="mock"><div class="earn"><small>Total Earnings</small><b>₹100</b><span style="display:block;background:#fff;color:#111;border-radius:8px;padding:8px;text-align:center;margin-top:8px;font-weight:600">Start Recording</span></div>
-  <p style="text-align:left;margin:12px 0 4px!important"><b style="color:#111">Rewards</b><br>Complete 30 days consecutively to get an additional ₹100 reward.</p><div class="bar"><i></i></div><small style="color:#6b7280">14 /30 Days</small></div></div>'''
-    s_intro = f'''<span class="eyebrow">Introduction</span><h2>Turning every rickshaw into a moving ad.</h2>
-<p class="big">Jugnoo is a ride-hailing platform operating across India, connecting everyday commuters with rides.</p>
-<p>As part of its marketing, Jugnoo pays Auto drivers to display Jugnoo posters on their vehicles, turning every rickshaw into a moving ad at a fraction of the cost of traditional advertising.</p>
-<div class="row c3 top float3d" style="margin-top:40px" data-stagger>{img(F('Kv5zh9kddZr9EqL8J6ZhDrRgQ'),'Jugnoo auto, front')}{img(F('24Jhcv3uglkdCAlLRUKbvdcBTo'),'Jugnoo auto, side')}{img(F('m4Gc35DGjsKbrlpBQLFX1pws588'),'Jugnoo auto, back')}</div>
-<div class="callout"><h3>My Role — Product Designer</h3><p>Problem framing, User Research, Flow design, Strategy, Prototyping, High-fidelity design. · Timeline — 6 weeks</p></div>'''
-    s_app = f'''<span class="eyebrow">Our Approach</span><h2>Phases, not a grand plan.</h2>
-<p class="big">The branding verification system evolved through phases.</p>
-<p>Each phase solved the specific gap the previous one exposed, rather than trying to design a complete solution upfront.</p>
-<h3>Design Goals</h3>
-{cards([("01","Fairness","Rules were designed around realistic driver scenarios like vehicle downtime, emergencies, rejected videos so the system penalizes non-compliance, not bad luck."),("02","Consistency","Daily rewards and streak incentives were designed to work together. This keeps both short-term and long-term motivation aligned."),("03","Simplicity","Verification, rewards, and activity history were kept in one clear flow. Drivers can easily understand their current status without checking multiple screens.")])}'''
-    s_first = f'''<span class="eyebrow">The first idea</span><h2>Just upload a photo, every day.</h2>
-<p class="big">The most straightforward fix seemed obvious: have drivers upload a photo of their vehicle every day, so branding could be verified consistently.</p>
-{mocks}
-<h3>Why would they?</h3>
-<p>Drivers already go through sign-in and ride-related steps every single day. Adding one more unpaid task with no clear benefit to them was just friction and friction pushes drivers away from the platform. We needed drivers to want to do this.</p>
-<div class="row c2" style="margin-top:30px">{shot(F('OJcIac7IoWZmsBplOEhu3aWww'),'Branding instructions screen',g)}{shot(F('YtgeEH2Eqn4PAdvwH7fBD135TY'),'Try again tomorrow dialog',g)}</div>'''
-    s_paid = f'''<span class="eyebrow">01 — Verification + a base incentive</span><h2>So we paid them.</h2>
-<p class="big">We set up daily verification and gave drivers an actual reason to comply.</p>
-<p>Every time a driver submitted a branding video that passed AI verification, ₹10 was credited directly to their Jugnoo Wallet. This gave drivers a reason to participate.</p>
-<h3>But one day isn’t enough</h3><p>Jugnoo needed drivers to maintain branding continuously, not just submit once and disengage.</p>
-<div class="callout"><h3>Consistency Streak</h3><p>A streak reward was layered on top of the daily payout: every 30 consecutive days of approved submissions unlocks an additional ₹100 credited directly to their Jugnoo Wallet. This gave drivers a reason to participate.</p></div>
-{mocks2}
-<div class="row c2 top">{shot(F('vWZW90JnfKFrkO5RA8mXkV8w14I'),'Branding history',g)}{shot(F('CjyburaFjhnoWupTIqVhTVHDUrE'),'Branding history, all states',g)}</div>'''
-    s_edge = f'''<span class="eyebrow">02 — A Fair Edge Case</span><h2>What if a driver genuinely couldn’t submit?</h2>
-<p class="big">A vehicle could break down. A driver could take a day off for a personal emergency.</p>
-<p>If we treated a genuine miss the same way as someone simply not bothering, drivers would stop trusting the system and stop caring about branding altogether.</p>
-{cards([("Skip","Skip for Today","A skip is allowed once every 15 days, so a genuine miss doesn't feel like a punishment."),("Retry","Two attempts a day","A driver gets two attempts to submit a video. If both get rejected, they can try again the next day instead of losing the day entirely."),("Reset","Two missed days resets the streak","Branding stays active even after a missed day — a driver isn't cut off from the program. Two consecutive missed days reset the streak back to Day 1, and the driver becomes ineligible for the ₹100 they'd have earned at 30 days.")])}
-<div class="quote">Only 1 Attempt Left — Your video was rejected twice today. You can skip today or try again tomorrow.</div>
-<p>If you miss two days in a row, your streak will reset and you'll need to start over from the beginning. <i>Skip can be used once every 15 days.</i></p>
-<div class="row c2 float3d" style="margin-top:30px">{img(F('6tSnG38U4gmmu2Y94TIjD51S3J0'),'Jugnoo auto, side')}{img(F('TOPCniumVDt7uZwYcVgXgEln4Yo'),'Jaipur Adventures auto')}</div>'''
-    s_instr = f'''<span class="eyebrow">Transparency</span><h2>A dedicated Branding Instructions section</h2>
-<p>To keep the experience transparent and reduce confusion - key instructions and streak rules are shown clearly, so drivers always know what is expected and what happens next. It gives quick access to video guidelines and FAQs for any additional questions. This helps drivers make the right decision without leaving the flow.</p>
-<h3>Every approved submission and every streak milestone shows up as real money</h3>
-<p>Visible in the driver’s wallet, explained on a dedicated rewards page, and recorded in a history they can look back on anytime.</p>
-<p>This was more about making the system work in real situations. Each decision came from questioning what could go wrong, how a driver might respond, and what would still feel fair. The final experience was shaped by following those questions until the flow felt clear and practical.</p>
-<div class="float3d" style="max-width:520px;margin:34px auto 0">{img(F('k8rrrQppw5ORf6fqJT0TgFFSk'),'Jugnoo auto, back')}</div>'''
-    s_learn = f'''<span class="eyebrow">Reflection</span><h2>My Learnings</h2>
-{cards([("01","Incentives are part of the experience.","The ₹10 daily reward, 30-day streak, and ₹100 bonus directly affect how drivers respond to the feature. These numbers needed as much thought as the screens themselves."),("02","Driver feedback helped shape the solution.","Early conversations made one thing clear: drivers needed a strong reason to participate. This helped define the reward system and overall flow."),("03","Usability testing improved the retry and skip flow.","Some rules looked fair during planning but felt frustrating during testing. This led to changes such as retrying the next day and allowing skips in specific situations."),("04","A good flow does not always guarantee adoption.","Even if the experience is simple and fair, drivers still need to trust the system and see value in using it. Real usage will show how well the feature performs over time.")], "cards3").replace('cards3','cards3" style="grid-template-columns:1fr 1fr')}
-<p class="big" style="margin-top:50px">Thank You! Let’s Connect — <a class="ilink" href="mailto:{EMAIL}">{EMAIL}</a></p>'''
-    case_page(p, 0, [("intro","Introduction",s_intro),("approach","Our approach",s_app),("first","The first idea",s_first),("paid","So we paid them",s_paid),("edge","A fair edge case",s_edge),("instructions","Instructions",s_instr),("learnings","Learnings",s_learn)],
-              "A system that verifies vehicle branding daily through AI and rewards consistency through a series of incentive structure, designed to balance business compliance needs with driver trust and retention.")
-
-    # ---------------- PlantParents (Framer text + assets)
-    p = P["plant-parents"]; g = "plant"
-    pl_intro = f'''<span class="eyebrow">The problem</span><h2>Buying plants online has become easy, but keeping them alive?</h2>
-<p class="big">Not so much.</p>
-<p>Most people in cities either gift plants or try to bring greenery into their homes, but they don’t know how to take care of them. Once the plant starts drooping or getting yellow, there's panic. They Google things, call their parents, or just give up. Online platforms sell plants, pots, and tools, but they stop there.</p>
-<div class="quote">What if people could actually get help from someone who knows how to save your plants?</div>
-<div class="row c3 top float3d" data-stagger>{img(F('hYJBXWNlQj0CCdqNH3eH5IHRaG0'),'Plant')}{img(F('15nDy43wsXPAcGBtCy1tR3s'),'Plant')}{img(F('VKhaTjnITRtY7FYmpZSmGiYCH8M'),'Rubber plant')}</div>
-<h3>Design Process</h3>
-{cards([("01 · Empathize","Empathize","Listened to plant lovers & new buyers to deeply understand struggles with plant care, slow delivery, and the absence of expert support."),("02 · Define","Define","Narrowed these insights into clear user problems like confusing online shopping, lack of quick help, and missing local shop connections."),("03 · Ideate","Ideate","Brainstormed unique solutions like same-day plant delivery, easy-to-use filters, and the ability to book visits from local plant experts."),("04 · Prototype","Prototype","Built interactive flows to test every step from shopping for plants to booking an expert home visit ensuring a smooth user journey.")], "cards4")}'''
-    pl_emp = f'''<span class="eyebrow">01 · Empathize</span><h2>Problem statement & solution</h2>
-<h3>Problem Statement</h3>
-<p>Buying plants online should be easy but it rarely is. You end up browsing five different websites, most of them showing the same few plants. Delivery takes too long, there’s no proper guidance, and if your plant starts dying later, you have no clue whom to ask.</p>
-<p>For people who genuinely want to keep plants at home and struggle to keep them alive it becomes more stress than joy. Especially when all they really want is something simple, quick, and reliable.</p>
-<h3>Solution</h3>
-<p>What we’re building is a website that connects people to local plant shops around them so they can buy fresh, healthy plants, pots, and tools, and get them delivered the same day or next.</p>
-<p>And if someone’s plant is struggling, they can ask for help and a local plant expert will visit their home to take a look. This way the process always stays simple, warm, and trustworthy. Just how plant shopping should feel.</p>
-<div class="row c2 float3d" style="margin:34px 0">{img(F('yImS7lBzlERjaoxZY0cTKq6i4'),'Watering plants')}{img(F('sK5aQgap2UCgzQdLHoEDk1XlRs'),'Nurseries and experts')}</div>
-<h3>User Pain Points</h3>{shot(F('bJnExjameQ1jkcnScm4mTIHgfU'),'User pain points',g)}'''
-    pl_def = f'''<span class="eyebrow">02 · Define</span><h2>User personas & empathy mapping</h2>
-<div class="row c2 top">{shot(F('wjJC7v6kBzmmJHzvztC4fhCwnoE'),'Persona: Nisha Kumar',g)}{shot(F('6vmsudAUc5AXHmyStg6iHuuyR8k'),'Persona: Rahul Mehta',g)}</div>
-<h3>Empathy Mapping</h3>
-<div class="row c2 top">{shot(F('bDRPmXqCxxDao4XFyfRjvzSLjjk'),'Empathy map: Nisha',g)}{shot(F('YezLwgcys9ryFVYa5LHsPKtdU'),'Empathy map: Rahul',g)}</div>'''
-    pl_ide = f'''<span class="eyebrow">03 · Ideate</span><h2>Site maps, colour & type</h2>
-<h3>Site Maps</h3>{shot(F('9BPJwDvnJBQ3sHBLgjGoEBtUaRA'),'Site map',g)}
-<h3>Colour</h3>
-<div class="palette" data-stagger><div style="background:#003324;color:#E7F4EE">#003324</div><div style="background:#E7F4EE">#E7F4EE</div><div style="background:#A8E919">#A8E919</div><div style="background:#fff">#FFFFFF</div></div>
-<h3>Typeface — Manrope & Inter</h3>{shot(F('sauHs3GyhMExhjLOslEID3qiTOo'),'Typography',g)}
-<div class="row c2 float3d" style="margin-top:30px">{img(F('AoLBVGVPzT121NDoJVWabVbBfg'),'PlantParents laptop and logo')}{img(F('zSCFtDKWAjTe0l45jo6NMng'),'Choose your expert')}</div>'''
-    pl_pro = f'''<span class="eyebrow">04 · Prototype</span><h2>From shopping to booking an expert</h2>
-<h3>Information Architecture</h3>{shot(F('Mz4XeAdkisu19eMgUhdr0LXHL1g'),'Information architecture',g)}
-<h3>Home Page</h3>{shot(F('cHmxcCb10uzXQthfeHiYkmM6ZIE'),'Home page, laptop',g)}
-<div class="row c3 top" style="margin-top:22px">{shot(F('93C45hEzLXiY35JimSmtsmaiSM'),'Home page full',g)}{shot(F('1lS3Mh2Rl7DSyNI1qs1L5wsNO0'),'Home page, mobile',g)}{shot(F('gV583FqybOx3LhoggrNovQnSbU'),'Home page, dark theme',g)}</div>
-<h3>Dark Theme</h3><div class="row c2" style="align-items:center">{shot(F('O4iqmzQYmdo8NrLCpSc7VvI6cFI'),'Favorites, dark',g)}{img(F('fWKpx6ETVJsH8QAvDfAqgYUdU'),'Phone mock','float3d')}</div>
-<h3>Shop Page</h3><div class="row c2 top">{shot(F('5AQOGsPcYrnYPwcU7giOXDRO9E'),'Shop page',g)}{shot(F('7g7keQfwSrJTtTXH0j81UHuJvAc'),'Shop page, mobile',g)}</div>
-<h3>Plant Expert Page</h3><div class="row c2 top">{shot(F('m3wG0fY4ps1koqOcRBQHS7Bl8E'),'Plant expert page',g)}{shot(F('hQ6j0Kt4euMiCT0MeVft50ekgA'),'Plant expert page, mobile',g)}</div>'''
-    pl_con = f'''<span class="eyebrow">Reflection</span><h2>Conclusion & Learnings</h2>
-<p>Working on PlantParents was about solving a very real problem that plant lovers face every day. From the very beginning, the idea of connecting local nurseries and plant experts to people’s homes felt close to heart, and that guided every design decision.</p>
-<p>Through user research, I realized how personal plant care is, people don’t just want to buy a product, they want reassurance, guidance, and a feeling of success with their plants. That insight shaped the focus on same-day delivery and booking plant helpers, which became the core differentiators of the project.</p>
-{shot(F('UXKKTdUhPeTT6S75h2znSdNPq3s'),'Thank you for watching',g)}'''
-    case_page(p, 1, [("problem","The problem",pl_intro),("empathize","Empathize",pl_emp),("define","Define",pl_def),("ideate","Ideate",pl_ide),("prototype","Prototype",pl_pro),("learnings","Conclusion",pl_con)],
-              "Designed an end-to-end marketplace experience for discovering plants, shopping from nurseries, and booking plant-care experts — across user flows, information architecture, wireframes, and responsive high-fidelity UI.")
-
-    # ---------------- Connect (Behance)
-    p = P["connect-b2b-feedback"]
-    c1 = '''<span class="eyebrow">The project</span><h2>Growth Score, and the questions ratings can’t ask.</h2>
-<p class="big">Connect is a feature within Growth Score that lets businesses create personalised feedback forms and distribute them through email campaigns.</p>
-<p>Growth Score is a B2B customer feedback and reputation management platform that helps businesses understand how customers feel about their products and services. Through features like NPS, CSAT, reviews, referrals, and testimonials, businesses can collect feedback, measure satisfaction, and build stronger customer relationships.</p>
-<p>But customer feedback isn't always about ratings. Sometimes, businesses need to ask specific questions to understand what their customers really want. Teams can customise their questions, apply scoring, and collect responses in one place, making it easier to turn feedback into insight.</p>'''
-    c2 = cards([("Customer Retention","10–15%","Potential churn reduction"),("Revenue Expansion","5–15%","Potential annual revenue uplift")], "cards3").replace('cards3', 'cards3" style="grid-template-columns:1fr 1fr')
-    c2 = f'''<span class="eyebrow">Impact</span><h2>What it could unlock</h2>{c2}
-<h3>Here is what this project taught me</h3>
-{cards([("01","Balance Business Goals with User Needs","This project taught me to think from both a business and a user perspective. I learned how to simplify complex processes without limiting flexibility, while building a product structure that can scale and adapt to future features. Thinking beyond the immediate interface helped me understand how design decisions can support both business goals and user needs."),("02","Make Complex Workflows Easier to Navigate","I learned that showing too many options on one screen can overwhelm users and increase decision-making effort. Breaking a process into smaller, guided steps makes it easier to follow. I also realized how important editing, deleting, and going back are when designing forms, as users need the freedom to correct mistakes without starting over.")], "cards3").replace('cards3','cards3" style="grid-template-columns:1fr 1fr')}'''
-    case_page(p, 2, [("project","The project",c1),("impact","Impact & learnings",c2)],
-              "Helping businesses collect more meaningful feedback, faster — a B2B feedback-form builder with email campaigns, scoring and response collection.")
-
-    # ---------------- Wellspring (Behance)
-    p = P["wellspring-healthcare"]
-    w1 = '''<span class="eyebrow">About the project</span><h2>A healthier, happier you — in one hub.</h2>
-<p class="big">Through this project I wanted to solve a real life problem of taking care of our health in today's fast-paced world.</p>
-<p>Managing our health often takes a backseat. Wellspring was born from the desire to tackle this challenge. This project aims to empower individuals by providing a central hub for all their healthcare needs. By simplifying tasks like tracking symptoms, scheduling appointments, and managing medications, Wellspring hopes to make proactive health management more accessible and convenient, ultimately leading to a healthier and happier you.</p>
-<h3>Design process</h3><p>Discover · Empathize · Define · Ideation · Prototype · Testing</p>'''
-    w2 = f'''<span class="eyebrow">Key takeaways</span><h2>What I took away</h2>
-{cards([("1","User needs over Aesthetics","I used to think design was all about aesthetics, but this project showed me the importance of prioritizing the user. By understanding their needs, frustrations, and goals, I wanted to create a design that works for them."),("2","The power of iteration","This project taught me the power of iteration. I constantly tested my ideas with users, gathered feedback, and then refined my designs based on their input. It's a cycle of learning and improvement that leads to a much stronger final product."),("3","Less is more","I understood the concept of Less is more and the importance of clear and concise design. Simplicity is the way to go, by focusing on intuitive navigation, easy-to-understand visuals, and user-friendly interactions.")])}
-<p style="margin-top:30px">As a student, I'm constantly eager to learn and grow, and this project opened my eyes to the fascinating world of user experience design. There's so much more to discover, and I can't wait to put these learnings into practice on future projects!</p>
-<p class="big">Let’s build a Project together — <a class="ilink" href="mailto:{EMAIL}">{EMAIL}</a></p>'''
-    case_page(p, 3, [("about","About the project",w1),("takeaways","Key takeaways",w2)],
-              "Manage your health effortlessly — track symptoms, make appointments, take meds, and record it all in one place.")
-
-    # ---------------- Blue Pottery (Behance)
-    p = P["blue-pottery"]
-    b1 = '''<span class="eyebrow">The idea</span><h2>Beautiful and practical.</h2>
-<p class="big">Blue pottery is often categorized solely as delicate showpieces.</p>
-<p>But there is potential to do so much with this stunning art form. That’s why I decided to focus on creating <b>beautiful and practical</b> blue pottery products for everyday use.</p>
-<h3>In this journey I discovered…</h3><p>Motifs and patterns drawn from the craft, a palette of six core colours, and a set of products made with them — a jewelry box, a camel table clock, a peacock table clock, coffee mugs, and gifting boxes in traditional Jaipur architectural motifs.</p>
-<div class="palette" data-stagger style="grid-template-columns:repeat(6,1fr)"><div style="background:#2236d6"></div><div style="background:#4fc3ea"></div><div style="background:#c1481a"></div><div style="background:#f5d90f"></div><div style="background:#3a6b25"></div><div style="background:#0c1a9c"></div></div>'''
-    case_page(p, 4, [("idea","The idea",b1)], "Beautiful and practical blue pottery products for everyday use — motifs, patterns, and objects inspired by the Jaipur tradition.")
-
-    # ---------------- Elementals (Behance)
-    p = P["elementals-poster"]
-    e1 = '''<span class="eyebrow">The poster</span><h2>Opposites react.</h2>
-<p class="big">A fan poster for Disney Pixar’s Elemental — water and fire, meeting in the middle.</p>
-<p>Illustrated in Adobe Illustrator, with the film’s title lettered in Devanagari: एलीमेंटल.</p>'''
-    case_page(p, 5, [("poster","The poster",e1)], "A fan poster for Disney Pixar’s Elemental — “Opposites react”.")
+    """One template for all six: cover, role + timeline, problem, what I did,
+    takeaway, impact, a short intro, then her Behance boards in order."""
+    SUBTITLE = {
+     "jugnoo-vehicle-branding": "A system that verifies vehicle branding daily through AI and rewards consistency through a series of incentive structure, designed to balance business compliance needs with driver trust and retention.",
+     "plant-parents": "An end-to-end marketplace for discovering plants, shopping from local nurseries, and booking plant-care experts.",
+     "connect-b2b-feedback": "Helping businesses collect more meaningful feedback, faster — a B2B feedback-form builder with email campaigns, scoring and response collection.",
+     "wellspring-healthcare": "Manage your health effortlessly — track symptoms, make appointments, take meds, and record it all in one place.",
+     "blue-pottery": "Beautiful and practical blue pottery products for everyday use — motifs, patterns, and objects inspired by the Jaipur tradition.",
+     "elementals-poster": "A fan poster for Disney Pixar’s Elemental — “Opposites react”.",
+    }
+    for i, p in enumerate(PROJECTS):
+        case_page(p, i, SUBTITLE[p["slug"]])
 
 def main():
-    build_index(); build_work(); build_about(); build_cases()
-    print("built:", ", ".join(sorted(glob.glob("*.html"))))
+    if "--all" in sys.argv:
+        print("WARNING: --all regenerates index/work/about from stale templates "
+              "and will discard hand-edits to those three pages.")
+        build_index(); build_work(); build_about()
+    build_cases()
+    print("built:", ", ".join(p["page"] for p in PROJECTS)
+          + (", index.html, work.html, about.html" if "--all" in sys.argv else ""))
 
 if __name__ == "__main__":
     main()
