@@ -407,8 +407,7 @@ section{position:relative}
 body.lock{overflow:hidden}
 
 /* shutter transition ---------------------------------------------- */
-.curtain{position:fixed;inset:0;z-index:400;background:var(--ink);color:var(--cream);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 var(--gut);transform:translateY(0);transition:transform .5s var(--ease-io),border-radius .5s var(--ease-io);pointer-events:all;border-radius:0}
-body.ready .curtain{transform:translateY(-101%);border-radius:0 0 50% 50%/0 0 90px 90px;pointer-events:none;transition-duration:.6s}
+.curtain{display:none}
 .curtain>*{transition:opacity .3s,transform .4s var(--ease)}
 body.ready .curtain>*{opacity:0;transform:translateY(-14px)}
 .curtain__tag{position:absolute;top:26px;left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:rgba(248,246,243,.5);white-space:nowrap}
