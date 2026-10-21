@@ -475,8 +475,8 @@ body.ready .curtain>*{opacity:0;transform:translateY(-14px)}
 .email-copy{background:none;border:none;cursor:pointer;width:24px;height:24px;color:var(--cream);transition:all .3s;display:flex;align-items:center;justify-content:center}
 .email-copy svg{width:20px;height:20px;stroke:currentColor}
 .email-copy:hover{color:var(--orange);transform:scale(1.15)}
-.footer__links{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;margin-bottom:30px}
+.footer__links{display:flex;flex-direction:row;align-items:center;justify-content:center;gap:12px;margin-bottom:30px;flex-wrap:wrap}
 .footer__links a{color:var(--cream);text-decoration:none;font-weight:500;font-family:var(--sans);transition:color .3s}
 .footer__links a:hover{color:var(--orange)}
-.dot{color:rgba(248,246,243,.5);display:none}
+.dot{color:rgba(248,246,243,.5)}
 .footer__note{font-size:13px;color:rgba(248,246,243,.7);margin:0;font-family:var(--sans)}
