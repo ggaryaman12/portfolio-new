@@ -465,7 +465,7 @@ body.ready .curtain>*{opacity:0;transform:translateY(-14px)}
 @keyframes float-animation{0%,100%{transform:translateY(0);opacity:1}50%{transform:translateY(-8px);opacity:0.8}}
 
 /* footer -------------------------------------------------- */
-.footer{background:var(--ink);color:var(--cream);padding:80px var(--gut) 40px;text-align:center}
+.footer{background:var(--ink);color:var(--cream);padding:80px var(--gut) 40px;text-align:center;width:100%;margin-top:auto}
 .footer__title{font-family:var(--serif);font-weight:700;font-size:clamp(28px,5vw,48px);margin-bottom:30px;color:#fff}
 .footer__email{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:40px;font-size:16px}
 .email-text{color:var(--cream);font-weight:500;font-family:var(--sans)}
