@@ -80,13 +80,12 @@ section{position:relative}
 }
 
 /* buttons ------------------------------------------------------- */
-.btn{--bg:var(--ink);--fg:var(--cream);display:inline-flex;align-items:center;gap:10px;padding:12px 28px;border-radius:999px;background:var(--bg);color:var(--fg);text-decoration:none;font-weight:600;font-size:15px;border:1.5px solid var(--bg);transition:all .3s cubic-bezier(.33,.66,.66,1);cursor:pointer}
-.btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,0,0,.15)}
-.btn:active{transform:translateY(0)}
-.btn--ghost{--bg:transparent;--fg:var(--ink);border-color:var(--ink);background:#fff}
-.btn--ghost:hover{border-color:var(--ink);box-shadow:0 8px 20px rgba(0,0,0,.1)}
-.btn--orange{--bg:var(--orange);--fg:#fff;box-shadow:0 4px 12px rgba(247,108,94,.3)}
-.btn--orange:hover{box-shadow:0 8px 24px rgba(247,108,94,.4);transform:translateY(-2px)}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:12px 28px;border-radius:999px;background:var(--bg,var(--ink));color:var(--fg,var(--cream));text-decoration:none;font-weight:600;font-size:15px;border:1.5px solid currentColor;cursor:pointer;transition:box-shadow .2s,transform .2s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(0,0,0,.12)}
+.btn--orange{background:var(--orange);color:#fff;border-color:var(--orange)}
+.btn--orange:hover{box-shadow:0 6px 16px rgba(247,108,94,.25)}
+.btn--ghost{background:#fff;color:var(--ink);border-color:var(--ink)}
+.btn--ghost:hover{box-shadow:0 6px 16px rgba(0,0,0,.08)}
 .btn .arr{transition:transform .4s var(--ease)}.btn:hover .arr{transform:translateX(5px)}
 .ilink{display:inline-flex;align-items:center;gap:8px;font-weight:600;text-decoration:none;border-bottom:2px solid var(--orange);padding-bottom:2px;transition:gap .3s,color .3s}
 .ilink:hover{gap:14px;color:var(--orange)}
