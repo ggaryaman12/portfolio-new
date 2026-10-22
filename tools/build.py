@@ -470,12 +470,27 @@ def build_cases():
     for i, p in enumerate(PROJECTS):
         case_page(p, i, SUBTITLE[p["slug"]])
 
+def build_seo():
+    """robots.txt + sitemap.xml. A freshly launched domain has no history, so
+    give crawlers an explicit map. URLs use the canonical www host."""
+    pages = [""] + ["work", "about"] + [p["page"].replace(".html", "") for p in PROJECTS]
+    urls = "".join(
+        f"  <url><loc>{SITE}/{pg}</loc><changefreq>monthly</changefreq>"
+        f"<priority>{'1.0' if pg == '' else '0.8'}</priority></url>\n"
+        for pg in pages)
+    open("sitemap.xml", "w", encoding="utf8").write(
+        '<?xml version="1.0" encoding="UTF-8"?>\n'
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+        f"{urls}</urlset>\n")
+    open("robots.txt", "w", encoding="utf8").write(
+        f"User-agent: *\nAllow: /\n\nSitemap: {SITE}/sitemap.xml\n")
+
 def main():
     if "--all" in sys.argv:
         print("WARNING: --all regenerates index/work/about from stale templates "
               "and will discard hand-edits to those three pages.")
         build_index(); build_work(); build_about()
-    build_cases()
+    build_cases(); build_seo()
     print("built:", ", ".join(p["page"] for p in PROJECTS)
           + (", index.html, work.html, about.html" if "--all" in sys.argv else ""))
 
