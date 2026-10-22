@@ -40,7 +40,7 @@ html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;overflow-x:clip}
   .callout,.mock{max-width:100%}
   .mockrow .mock{width:100%;max-width:none}
 }
-body{margin:0;background:var(--cream);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:clip}
+body{margin:0;background:#F5F5F5;color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:clip}
 img{max-width:100%;height:auto;display:block}
 a{color:inherit}
 h1,h2,h3,h4{font-family:var(--serif);font-weight:700;line-height:1.08;letter-spacing:-.01em;margin:0}
@@ -80,13 +80,13 @@ section{position:relative}
 }
 
 /* buttons ------------------------------------------------------- */
-.btn{display:inline-flex;align-items:center;gap:10px;padding:12px 28px;border-radius:999px;background:var(--bg,var(--ink));color:var(--fg,var(--cream));text-decoration:none;font-weight:600;font-size:15px;border:1.5px solid currentColor;cursor:pointer;transition:box-shadow .2s,transform .2s}
-.btn:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(0,0,0,.12)}
-.btn--orange{background:var(--orange);color:#fff;border-color:var(--orange)}
-.btn--orange:hover{box-shadow:0 6px 16px rgba(247,108,94,.25)}
-.btn--ghost{background:#fff;color:var(--ink);border-color:var(--ink)}
-.btn--ghost:hover{box-shadow:0 6px 16px rgba(0,0,0,.08)}
-.btn .arr{transition:transform .4s var(--ease)}.btn:hover .arr{transform:translateX(5px)}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:12px 28px;border-radius:999px;background:var(--bg,var(--ink));color:var(--fg,var(--cream));text-decoration:none;font-weight:600;font-size:15px;border:1.5px solid currentColor;cursor:pointer;transition:background .3s ease,border-color .3s ease,box-shadow .3s ease;will-change:auto}
+.btn:hover{box-shadow:0 4px 12px rgba(0,0,0,.15)}
+.btn--orange{background:var(--orange);color:#fff;border-color:var(--orange);box-shadow:0 2px 8px rgba(247,108,94,.2)}
+.btn--orange:hover{background:#E85344;border-color:#E85344;box-shadow:0 6px 16px rgba(232,83,68,.3)}
+.btn--ghost{background:#fff;color:var(--ink);border-color:var(--ink);box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.btn--ghost:hover{background:#fff;border-color:var(--ink);box-shadow:0 6px 16px rgba(0,0,0,.12)}
+.btn .arr{transition:transform .3s ease}.btn:hover .arr{transform:translateX(4px)}
 .ilink{display:inline-flex;align-items:center;gap:8px;font-weight:600;text-decoration:none;border-bottom:2px solid var(--orange);padding-bottom:2px;transition:gap .3s,color .3s}
 .ilink:hover{gap:14px;color:var(--orange)}
 
