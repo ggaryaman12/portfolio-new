@@ -466,7 +466,9 @@ body.lock{overflow:hidden}
 /* footer -------------------------------------------------- */
 .footer{background:var(--ink);color:var(--cream);padding:80px var(--gut) 40px;text-align:center;width:100%;margin-top:auto}
 .footer__title{font-family:var(--serif);font-weight:700;font-size:clamp(28px,5vw,48px);margin-bottom:30px;color:#fff}
-.footer__email{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:40px;font-size:16px}
+.footer__email{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:40px;font-size:16px;transition:all .3s ease;cursor:pointer}
+.footer__email:hover .email-text,
+.footer__email:hover .email-copy{color:var(--orange)}
 .email-text{color:var(--cream);font-weight:500;font-family:var(--sans)}
 .email-copy{background:none;border:none;cursor:pointer;width:24px;height:24px;color:var(--cream);transition:all .3s;display:flex;align-items:center;justify-content:center}
 .email-copy svg{width:20px;height:20px;stroke:currentColor}
