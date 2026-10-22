@@ -209,8 +209,9 @@ function say(m){
   toast.textContent=m;toast.classList.add('show');clearTimeout(tt);tt=setTimeout(function(){toast.classList.remove('show')},2600)}
 /* footer copy-email. Lives here so every page shares one implementation, and
    so the icon is left intact (setting textContent would delete the svg). */
-$$('.email-copy').forEach(function(b){
-  var mail=(($('.email-text',b.parentNode)||{}).textContent||'').trim()||'radhikaselement@gmail.com';
+$$('.email-copy, .email-text').forEach(function(b){
+  var parent=b.classList.contains('email-copy')?b.parentNode:b.parentNode;
+  var mail=(($('.email-text',parent)||{}).textContent||'').trim()||'radhikaselement@gmail.com';
   b.addEventListener('click',function(){
     (navigator.clipboard?navigator.clipboard.writeText(mail):Promise.reject())
       .then(function(){say('Copied '+mail)},function(){location.href='mailto:'+mail})});
