@@ -1,12 +1,25 @@
 #!/usr/bin/env python3
 """Generates the case-study pages. Run from repo root: python3 tools/build.py
 
-IMPORTANT — index.html, work.html and about.html are hand-maintained now.
+IMPORTANT — DO NOT RUN THIS WITHOUT READING THIS NOTE.
+
+As of 2026-10-23 the case-*.html pages are ALSO hand-maintained: they were
+redesigned directly in the repo (dark mode, new layout, lowercase type) and
+this script's case template no longer matches them. Running it would discard
+that redesign. The SEO/social tags on the live pages were likewise patched in
+place, not generated here.
+
+index.html, work.html and about.html are hand-maintained too.
 They were edited directly in the repo and this script's templates for them are
 stale, so a full build would REVERT that work. Those three are therefore opt-in:
 
-    python3 tools/build.py          -> case-*.html only            (safe)
-    python3 tools/build.py --all    -> also index/work/about       (reverts edits)
+Nothing regenerates by default any more. You must opt in explicitly:
+
+    python3 tools/build.py              -> refuses, explains, exits
+    python3 tools/build.py --cases      -> overwrite case-*.html  (loses redesign)
+    python3 tools/build.py --all        -> overwrite all 9 pages  (loses more)
+
+If you only need robots.txt/sitemap.xml, use --seo, which touches nothing else.
 
 Content sources: Radhika's Framer site + Behance profile (see CONTENT-NOTES.md)."""
 import os, sys, glob, html
@@ -486,13 +499,21 @@ def build_seo():
         f"User-agent: *\nAllow: /\n\nSitemap: {SITE}/sitemap.xml\n")
 
 def main():
-    if "--all" in sys.argv:
-        print("WARNING: --all regenerates index/work/about from stale templates "
-              "and will discard hand-edits to those three pages.")
+    args = set(sys.argv[1:])
+    if not args & {"--cases", "--all", "--seo"}:
+        print(__doc__)
+        print("Refusing to run: no target flag given. See the options above.")
+        return 2
+    if "--seo" in args and not args & {"--cases", "--all"}:
+        build_seo(); print("built: robots.txt, sitemap.xml"); return 0
+    print("WARNING: this overwrites hand-edited pages. Ctrl-C now if unsure.")
+    if "--all" in args:
         build_index(); build_work(); build_about()
     build_cases(); build_seo()
     print("built:", ", ".join(p["page"] for p in PROJECTS)
-          + (", index.html, work.html, about.html" if "--all" in sys.argv else ""))
+          + (", index.html, work.html, about.html" if "--all" in args else "")
+          + ", robots.txt, sitemap.xml")
+    return 0
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())
