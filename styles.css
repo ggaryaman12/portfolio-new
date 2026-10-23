@@ -331,10 +331,10 @@ section{position:relative}
 .num{font-family:var(--serif);font-style:italic;color:var(--orange);font-size:clamp(46px,6vw,90px);line-height:1}
 .cards3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:26px}
 .cards4{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:26px}
-.card{background:var(--paper);border:1px solid var(--line);border-radius:var(--r-m);padding:26px;transition:transform .5s var(--ease),box-shadow .5s;transform-style:preserve-3d}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:var(--r-m);padding:26px;transition:transform .5s var(--ease),box-shadow .5s;transform-style:preserve-3d;color:#2E2E2E}
 .card:hover{transform:translateY(-8px) rotate(-.6deg);box-shadow:var(--shadow)}
-.card b{display:block;font-family:var(--serif);font-size:21px;margin:6px 0 10px}
-.card p{margin:0;font-size:15.5px}
+.card b{display:block;font-family:var(--serif);font-size:21px;margin:6px 0 10px;color:#2E2E2E}
+.card p{margin:0;font-size:15.5px;color:#2E2E2E}
 .card .n{font-family:var(--mono);color:var(--orange);font-size:13px;letter-spacing:.1em}
 @media(max-width:900px){.cards3,.cards4{grid-template-columns:1fr 1fr}}@media(max-width:700px){.cards3,.cards4,.cards3[style]{grid-template-columns:1fr!important}}
 .shot{display:block;border-radius:var(--r-m);overflow:hidden;background:var(--paper);border:1px solid var(--line);box-shadow:0 20px 44px -26px rgba(30,17,9,.4);cursor:zoom-in;position:relative;margin:28px 0}
