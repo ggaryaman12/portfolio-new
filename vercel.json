@@ -10,10 +10,9 @@
   ],
   "headers": [
     { "source": "/assets/(.*)", "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }] },
-    {
-      "comment": "header.html/footer.html are markup partials, not pages. cleanUrls serves them at /header and /footer, where they would be indexed as empty, title-less pages. noindex rather than a robots.txt Disallow, because a disallowed URL can still be indexed from links while the crawler never sees the noindex.",
-      "source": "/(header|footer)",
-      "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }]
-    }
+    { "source": "/header", "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }] },
+    { "source": "/footer", "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }] },
+    { "source": "/header.html", "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }] },
+    { "source": "/footer.html", "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }] }
   ]
 }
