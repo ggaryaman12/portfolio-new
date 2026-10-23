@@ -40,7 +40,7 @@ html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;overflow-x:clip}
   .callout,.mock{max-width:100%}
   .mockrow .mock{width:100%;max-width:none}
 }
-body{margin:0;background:#2E2E2E;color:#FFFFFF;font-family:var(--sans);font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:clip}
+body{margin:0;background:#2E2E2E;color:#FFFFFF;font-family:'Inter',system-ui,sans-serif;font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:clip}
 img{max-width:100%;height:auto;display:block}
 a{color:inherit}
 h1,h2,h3,h4{font-family:var(--serif);font-weight:700;line-height:1.08;letter-spacing:-.01em;margin:0}
@@ -80,7 +80,7 @@ section{position:relative}
 }
 
 /* buttons ------------------------------------------------------- */
-.btn{display:inline-flex;align-items:center;gap:10px;padding:12px 28px;border-radius:999px;background:var(--bg,var(--ink));color:var(--fg,var(--cream));text-decoration:none;font-weight:600;font-size:15px;border:1.5px solid currentColor;cursor:pointer;transition:background .3s ease,border-color .3s ease,box-shadow .3s ease;will-change:auto}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:12px 28px;border-radius:12px;background:var(--bg,var(--ink));color:var(--fg,var(--cream));text-decoration:none;font-weight:600;font-size:15px;border:1.5px solid currentColor;cursor:pointer;transition:background .3s ease,border-color .3s ease,box-shadow .3s ease;will-change:auto}
 .btn:hover{box-shadow:0 4px 12px rgba(0,0,0,.15)}
 .btn--orange{background:#FFFFFF;color:#2E2E2E;border-color:#FFFFFF;box-shadow:0 2px 8px rgba(255,255,255,.2);transition:all .3s ease}
 .btn--orange:hover{background:#E8E8E8;border-color:#E8E8E8;box-shadow:0 6px 16px rgba(255,255,255,.3);transform:translateY(-2px)}
@@ -466,16 +466,15 @@ body.lock{overflow:hidden}
 /* footer -------------------------------------------------- */
 .footer{background:var(--ink);color:var(--cream);padding:80px var(--gut) 40px;text-align:center;width:100%;margin-top:auto}
 .footer__title{font-family:var(--serif);font-weight:700;font-size:clamp(28px,5vw,48px);margin-bottom:30px;color:#fff}
-.footer__email{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:40px;font-size:14px;transition:all .3s ease;background:#1a1a1a;color:#FFFFFF;padding:12px 20px;border-radius:999px;width:fit-content;margin-left:auto;margin-right:auto}
+.footer__email{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:40px;font-size:14px;transition:all .3s ease;background:#1a1a1a;color:#FFFFFF;padding:12px 16px;border-radius:12px;width:fit-content;margin-left:auto;margin-right:auto}
 .email-text{cursor:pointer;transition:color .3s ease;font-weight:500}
 .email-text:hover,
 .footer__email:hover .email-text,
 .footer__email:hover .email-copy{color:var(--orange)}
-.email-copy{background:none;border:none;cursor:pointer;color:#FFFFFF;transition:color .3s ease;display:flex;align-items:center;justify-content:center;padding:0;width:20px;height:20px}
-.email-text{color:var(--cream);font-weight:500;font-family:var(--sans)}
-.email-copy{background:none;border:none;cursor:pointer;width:24px;height:24px;color:var(--cream);transition:all .3s;display:flex;align-items:center;justify-content:center}
-.email-copy svg{width:20px;height:20px;stroke:currentColor}
-.email-copy:hover{color:var(--orange);transform:scale(1.15)}
+.email-copy{background:#2e2e2e;border:none;cursor:pointer;color:#FFFFFF;transition:all .3s ease;display:flex;align-items:center;justify-content:center;padding:8px;width:32px;height:32px;border-radius:6px}
+.email-text{color:#FFFFFF;font-weight:500;font-family:'Inter',system-ui,sans-serif}
+.email-copy svg{width:16px;height:16px;stroke:currentColor;fill:none}
+.email-copy:hover{color:var(--orange);transform:scale(1.1)}
 .footer__links{display:flex;flex-direction:row;align-items:center;justify-content:center;gap:12px;margin-bottom:30px;flex-wrap:wrap}
 .footer__links a{color:var(--cream);text-decoration:none;font-weight:500;font-family:var(--sans);transition:color .3s}
 .footer__links a:hover{color:var(--orange)}
