@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phase 2: Portfolio Redesign Audit & Direction</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif;
+            line-height: 1.6;
+            color: #202020;
+            background: #F8F7F4;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 60px 24px;
+        }
+
+        header {
+            margin-bottom: 80px;
+            border-bottom: 1px solid #E8E6E2;
+            padding-bottom: 40px;
+        }
+
+        h1 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            font-size: 18px;
+            color: #737373;
+            margin-bottom: 24px;
+        }
+
+        .status {
+            display: flex;
+            gap: 24px;
+            margin-top: 32px;
+            flex-wrap: wrap;
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-weight: 500;
+            font-size: 12px;
+        }
+
+        .badge-complete {
+            background: #E8F5E9;
+            color: #2E7D32;
+        }
+
+        .badge-phase2 {
+            background: #E3F2FD;
+            color: #1565C0;
+        }
+
+        section {
+            margin-bottom: 80px;
+        }
+
+        h2 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: -0.01em;
+        }
+
+        .section-meta {
+            font-size: 14px;
+            color: #737373;
+            margin-bottom: 32px;
+        }
+
+        h3 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-top: 32px;
+            margin-bottom: 16px;
+            color: #202020;
+        }
+
+        .subsection {
+            margin-bottom: 24px;
+        }
+
+        ul, ol {
+            margin-left: 24px;
+            margin-bottom: 16px;
+        }
+
+        li {
+            margin-bottom: 12px;
+            color: #202020;
+        }
+
+        .checkmark::before {
+            content: "✅ ";
+            margin-right: 4px;
+        }
+
+        .improvement::before {
+            content: "🔧 ";
+            margin-right: 4px;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 32px;
+            margin-bottom: 32px;
+        }
+
+        .card {
+            background: white;
+            border: 1px solid #E8E6E2;
+            border-radius: 8px;
+            padding: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            border-color: #202020;
+            box-shadow: 0 8px 24px rgba(32, 32, 32, 0.08);
+        }
+
+        .card h4 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .card p {
+            font-size: 14px;
+            color: #737373;
+            line-height: 1.5;
+        }
+
+        .color-palette {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 16px;
+            margin: 24px 0;
+        }
+
+        .color-swatch {
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid #E8E6E2;
+        }
+
+        .color-box {
+            height: 100px;
+            width: 100%;
+        }
+
+        .color-info {
+            padding: 12px;
+            background: white;
+            font-size: 12px;
+        }
+
+        .color-info .name {
+            font-weight: 600;
+            color: #202020;
+        }
+
+        .color-info .hex {
+            color: #737373;
+            font-family: 'Courier New', monospace;
+        }
+
+        .timeline {
+            position: relative;
+            margin: 32px 0;
+        }
+
+        .timeline-item {
+            display: flex;
+            margin-bottom: 24px;
+            gap: 16px;
+        }
+
+        .timeline-marker {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #F76C5E;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .timeline-item.inactive .timeline-marker {
+            background: #E8E6E2;
+        }
+
+        .timeline-content h4 {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .timeline-content p {
+            font-size: 14px;
+            color: #737373;
+        }
+
+        .checklist {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin: 24px 0;
+        }
+
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px;
+            background: #F8F7F4;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .checklist-item.done {
+            background: #E8F5E9;
+            color: #2E7D32;
+        }
+
+        .checkbox {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #202020;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            flex-shrink: 0;
+        }
+
+        .checkbox.checked {
+            background: #2E7D32;
+            border-color: #2E7D32;
+            color: white;
+        }
+
+        .note {
+            background: #FFF3E0;
+            border-left: 4px solid #F76C5E;
+            padding: 16px;
+            margin: 24px 0;
+            border-radius: 4px;
+            font-size: 14px;
+            color: #202020;
+        }
+
+        .note strong {
+            color: #D84315;
+        }
+
+        footer {
+            border-top: 1px solid #E8E6E2;
+            padding-top: 40px;
+            margin-top: 80px;
+            font-size: 14px;
+            color: #737373;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 32px;
+            }
+
+            h2 {
+                font-size: 24px;
+            }
+
+            .container {
+                padding: 40px 16px;
+            }
+
+            .status {
+                flex-direction: column;
+                gap: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Phase 2: Portfolio Redesign</h1>
+            <p class="subtitle">Audit, Analysis & Design Direction</p>
+            <div class="status">
+                <div class="status-item">
+                    <span class="status-badge badge-complete">Phase 1 Complete</span>
+                    Foundation & Polish
+                </div>
+                <div class="status-item">
+                    <span class="status-badge badge-phase2">Phase 2 Begin</span>
+                    Editorial Elevation
+                </div>
+            </div>
+        </header>
+
+        <!-- Phase 1 Summary -->
+        <section>
+            <h2>✅ Phase 1: Complete</h2>
+            <p class="section-meta">Foundation and polish established</p>
+
+            <div class="grid-2">
+                <div class="card">
+                    <h4>Typography</h4>
+                    <p>Changed body font to Inter for professional, modern appearance</p>
+                </div>
+                <div class="card">
+                    <h4>Buttons & UI</h4>
+                    <p>Updated all buttons to 12px border-radius for consistency</p>
+                </div>
+                <div class="card">
+                    <h4>Dark Mode</h4>
+                    <p>Implemented #2E2E2E background with white text throughout</p>
+                </div>
+                <div class="card">
+                    <h4>Footer System</h4>
+                    <p>Consistent footer across all pages with email copy functionality</p>
+                </div>
+                <div class="card">
+                    <h4>Case Studies</h4>
+                    <p>Simplified Jugnoo case study, expanded with Behance images</p>
+                </div>
+                <div class="card">
+                    <h4>Color Precision</h4>
+                    <p>Fixed backgrounds and text colors for optimal readability</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Current Audit -->
+        <section>
+            <h2>🔍 Current Website Audit</h2>
+
+            <h3>✅ What's Working Well</h3>
+            <ul>
+                <li class="checkmark">Dark mode foundation provides clean, professional base</li>
+                <li class="checkmark">Typography consistency with Inter font</li>
+                <li class="checkmark">Unified footer across all pages</li>
+                <li class="checkmark">Four authentic case studies with real project assets</li>
+                <li class="checkmark">Clear navigation structure</li>
+                <li class="checkmark">Functional email copy functionality</li>
+            </ul>
+
+            <h3>🔧 Areas for Improvement</h3>
+
+            <h4>1. Visual Hierarchy & Typography</h4>
+            <ul>
+                <li class="improvement">Hero section lacks distinctive visual impact</li>
+                <li class="improvement">No clear type scale established (heading sizes)</li>
+                <li class="improvement">Section headings need more visual distinction</li>
+                <li class="improvement">Paragraph text is uniform in weight and size</li>
+                <li class="improvement">Line lengths could be optimized for reading comfort</li>
+            </ul>
+
+            <h4>2. Layout & Spacing</h4>
+            <ul>
+                <li class="improvement">Inconsistent spacing between sections</li>
+                <li class="improvement">Some sections feel cramped, others disconnected</li>
+                <li class="improvement">Grid system could be more intentional</li>
+                <li class="improvement">Whitespace usage is inconsistent</li>
+                <li class="improvement">Visual rhythm needs refinement</li>
+            </ul>
+
+            <h4>3. Color System</h4>
+            <ul>
+                <li class="improvement">Only dark background + white text + orange accent</li>
+                <li class="improvement">Lacks secondary/tertiary colors for visual hierarchy</li>
+                <li class="improvement">No defined borders or divider system</li>
+                <li class="improvement">Accent color functional but not intentional</li>
+            </ul>
+
+            <h4>4. Hero Section</h4>
+            <ul>
+                <li class="improvement">Introduction feels generic</li>
+                <li class="improvement">Lacks distinctive composition</li>
+                <li class="improvement">Image integration not optimal</li>
+                <li class="improvement">CTA buttons need more prominence</li>
+            </ul>
+
+            <h4>5. Project Presentation</h4>
+            <ul>
+                <li class="improvement">Project cards are minimal without visual distinction</li>
+                <li class="improvement">No clear editorial hierarchy between projects</li>
+                <li class="improvement">Images could be larger and more impactful</li>
+                <li class="improvement">Descriptions are functional but lack compelling storytelling</li>
+            </ul>
+
+            <h4>6. Case Study Pages</h4>
+            <ul>
+                <li class="improvement">Metadata sections feel cramped</li>
+                <li class="improvement">Content sections feel disconnected</li>
+                <li class="improvement">Summary boxes lack polish</li>
+                <li class="improvement">Related projects section needs better design</li>
+            </ul>
+
+            <h4>7. About Page</h4>
+            <ul>
+                <li class="improvement">Generic resume-style layout</li>
+                <li class="improvement">Personal touches not emphasized</li>
+                <li class="improvement">Could tell a more compelling story</li>
+            </ul>
+
+            <h4>8. Interactions & Motion</h4>
+            <ul>
+                <li class="improvement">Hover states exist but are minimal</li>
+                <li class="improvement">Page transitions are basic</li>
+                <li class="improvement">No scroll-based reveals or visual feedback</li>
+                <li class="improvement">Microinteractions feel utilitarian, not premium</li>
+            </ul>
+        </section>
+
+        <!-- Design Direction -->
+        <section>
+            <h2>🎨 Proposed Design Direction</h2>
+            <p class="section-meta">"Refined Editorial" - Typography and intentionality first</p>
+
+            <h3>Visual Language Breakdown</h3>
+            <ul style="list-style: none; margin-left: 0;">
+                <li style="margin-bottom: 16px;">
+                    <strong style="font-size: 18px; color: #202020;">70% Editorial Magazine</strong><br>
+                    Content-focused, typography-led, minimal decoration
+                </li>
+                <li style="margin-bottom: 16px;">
+                    <strong style="font-size: 18px; color: #202020;">20% Interaction Design</strong><br>
+                    Smooth, purposeful motion, premium microinteractions
+                </li>
+                <li>
+                    <strong style="font-size: 18px; color: #202020;">10% Personality</strong><br>
+                    Thoughtful details that feel human and intentional
+                </li>
+            </ul>
+
+            <h3>Suggested Color Palette</h3>
+            <div class="color-palette">
+                <div class="color-swatch">
+                    <div class="color-box" style="background: #F8F7F4;"></div>
+                    <div class="color-info">
+                        <div class="name">Background</div>
+                        <div class="hex">#F8F7F4</div>
+                    </div>
+                </div>
+                <div class="color-swatch">
+                    <div class="color-box" style="background: #202020;"></div>
+                    <div class="color-info">
+                        <div class="name">Primary Text</div>
+                        <div class="hex">#202020</div>
+                    </div>
+                </div>
+                <div class="color-swatch">
+                    <div class="color-box" style="background: #737373;"></div>
+                    <div class="color-info">
+                        <div class="name">Secondary Text</div>
+                        <div class="hex">#737373</div>
+                    </div>
+                </div>
+                <div class="color-swatch">
+                    <div class="color-box" style="background: #E8E6E2;"></div>
+                    <div class="color-info">
+                        <div class="name">Borders</div>
+                        <div class="hex">#E8E6E2</div>
+                    </div>
+                </div>
+                <div class="color-swatch">
+                    <div class="color-box" style="background: #F76C5E;"></div>
+                    <div class="color-info">
+                        <div class="name">Accent</div>
+                        <div class="hex">#F76C5E</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="note">
+                <strong>Note:</strong> Warm neutrals create sophistication and longevity. Single accent color creates focus and hierarchy. No gradients, neon effects, or generic AI aesthetics.
+            </div>
+
+            <h3>Core Design Principles</h3>
+            <h4>1. Typography First</h4>
+            <ul>
+                <li>Typography is primary design element, not decoration</li>
+                <li>Clear type scale: 12, 14, 16, 18, 20, 24, 32, 40, 56, 72px</li>
+                <li>Limited weights: 400, 500, 600 only</li>
+                <li>Optimal line lengths: 50-75 characters for body text</li>
+                <li>Careful line-height control for elegance and readability</li>
+            </ul>
+
+            <h4>2. Layout & Spacing System</h4>
+            <ul>
+                <li>Consistent 16px baseline grid</li>
+                <li>Spacing scale: 8, 12, 16, 24, 32, 48, 64, 80px</li>
+                <li>Generous whitespace without creating voids</li>
+                <li>Visual rhythm maintained across pages</li>
+                <li>Every element has intentional purpose</li>
+            </ul>
+
+            <h4>3. Composition Strategy</h4>
+            <ul>
+                <li><strong>Homepage:</strong> Typography-led hero with refined project grid</li>
+                <li><strong>Work Page:</strong> Editorial two-column or alternating layout</li>
+                <li><strong>Case Studies:</strong> Structured narrative flow with clear sections</li>
+                <li><strong>About:</strong> Personal profile with intentional image placement</li>
+            </ul>
+        </section>
+
+        <!-- Implementation Timeline -->
+        <section>
+            <h2>📋 Phase 2 Implementation Plan</h2>
+            <p class="section-meta">Step-by-step execution roadmap</p>
+
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <h4>Step 1: Design System</h4>
+                        <p>Define type scale, spacing system, color tokens, and component patterns</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <h4>Step 2: Homepage Redesign</h4>
+                        <p>Apply design direction to hero section, project grid, and CTAs</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <h4>Step 3: Interior Pages</h4>
+                        <p>Redesign Work, About, and Case Study pages with new system</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <h4>Step 4: Interactions</h4>
+                        <p>Add subtle hover effects, scroll reveals, and page transitions</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <h4>Step 5: Polish & Optimize</h4>
+                        <p>Responsive testing, accessibility audit, performance optimization</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quality Gates -->
+        <section>
+            <h2>✨ Quality Gates</h2>
+            <p class="section-meta">Final design must pass these checks</p>
+
+            <div class="checklist">
+                <div class="checklist-item">
+                    <div class="checkbox">✓</div>
+                    <span>Every element has intentional purpose</span>
+                </div>
+                <div class="checklist-item">
+                    <div class="checkbox">✓</div>
+                    <span>Typography creates visual hierarchy</span>
+                </div>
+                <div class="checklist-item">
+                    <div class="checkbox">✓</div>
+                    <span>Spacing feels consistent and generous</span>
+                </div>
+                <div class="checklist-item">
+                    <div class="checkbox">✓</div>
+                    <span>Colors convey meaning and priority</span>
+                </div>
+                <div class="checklist-item">
+                    <div class="checkbox">✓</div>
+                    <span>Interactions feel smooth and premium</span>
+                </div>
+                <div class="checklist-item">
+                    <div class="checkbox">✓</div>
+                    <span>No generic template aesthetic</span>
+                </div>
+                <div class="checklist-item">
+                    <div class="checkbox">✓</div>
+                    <span>Content tells authentic story</span>
+                </div>
+                <div class="checklist-item">
+                    <div class="checkbox">✓</div>
+                    <span>Responsive design intentional</span>
+                </div>
+                <div class="checklist-item">
+                    <div class="checkbox">✓</div>
+                    <span>Accessibility standards met</span>
+                </div>
+                <div class="checklist-item">
+                    <div class="checkbox">✓</div>
+                    <span>Performance optimized</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Next Steps -->
+        <section>
+            <h2>🚀 Next Steps</h2>
+            <ol>
+                <li><strong>Review</strong> this audit and design direction</li>
+                <li><strong>Confirm</strong> visual direction (continue dark or shift to light?)</li>
+                <li><strong>Define</strong> specific design tokens and spacing system</li>
+                <li><strong>Begin</strong> with design system implementation</li>
+                <li><strong>Apply</strong> to homepage as pilot</li>
+                <li><strong>Roll out</strong> to remaining pages</li>
+                <li><strong>Polish</strong> and optimize for final release</li>
+            </ol>
+
+            <div class="note">
+                <strong>Goal:</strong> Create a premium editorial portfolio that feels intentionally designed by a thoughtful product designer. Every decision has purpose. No generic templates. Human-centered design.
+            </div>
+        </section>
+
+        <footer>
+            <p>Phase 2 Audit & Design Direction | Portfolio Redesign Project</p>
+            <p style="margin-top: 12px;">Ready to begin Phase 2? Review this document and confirm design direction.</p>
+        </footer>
+    </div>
+</body>
+</html>
