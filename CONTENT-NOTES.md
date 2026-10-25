@@ -48,7 +48,7 @@ Repo ships optimized HD webp (max 2000px wide Behance, 2400px Framer) in `assets
 | Disney's Elementals Poster | /gallery/200146141 | Jun 8 2024 | 1 |
 
 ## Links
-- Resume (nav link): https://drive.google.com/file/d/1pv8k1CAcRjwX_YjblszEcznRyadkhXmi/view?usp=sharing
+- Resume (nav link): https://drive.google.com/file/d/1EbfWYlFSqeKG8F6jiqInrfgAG0uC05uF/view?usp=sharing
 - Download Resume (button): https://drive.google.com/file/d/1mn57kZrvQAOB5N5ocv-0fnTCIip-mqVM/view?usp=drive_link
 - Behance: https://www.behance.net/radhikaselement
 - LinkedIn: https://www.linkedin.com/in/radhikaatolia/
