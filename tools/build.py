@@ -39,7 +39,7 @@ GMAIL = ("https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=radhikaselement@
 BEHANCE = "https://www.behance.net/radhikaselement"
 LINKEDIN = "https://www.linkedin.com/in/radhikaatolia/"
 RESUME_NAV = "https://drive.google.com/file/d/1EbfWYlFSqeKG8F6jiqInrfgAG0uC05uF/view?usp=sharing"
-RESUME_DL = "https://drive.google.com/file/d/1mn57kZrvQAOB5N5ocv-0fnTCIip-mqVM/view?usp=drive_link"
+RESUME_DL = "https://drive.google.com/file/d/1EbfWYlFSqeKG8F6jiqInrfgAG0uC05uF/view?usp=sharing"
 
 def F(i, ext="webp"): return f"assets/framer/{i}.{ext}"
 def B(slug, n, ext="webp"): return f"assets/behance/{slug}/{n:02d}.{ext}"

@@ -49,7 +49,7 @@ Repo ships optimized HD webp (max 2000px wide Behance, 2400px Framer) in `assets
 
 ## Links
 - Resume (nav link): https://drive.google.com/file/d/1EbfWYlFSqeKG8F6jiqInrfgAG0uC05uF/view?usp=sharing
-- Download Resume (button): https://drive.google.com/file/d/1mn57kZrvQAOB5N5ocv-0fnTCIip-mqVM/view?usp=drive_link
+- Download Resume (button): https://drive.google.com/file/d/1EbfWYlFSqeKG8F6jiqInrfgAG0uC05uF/view?usp=sharing
 - Behance: https://www.behance.net/radhikaselement
 - LinkedIn: https://www.linkedin.com/in/radhikaatolia/
 - Email: radhikaselement@gmail.com
