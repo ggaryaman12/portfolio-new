@@ -170,7 +170,7 @@ def head(title, desc, page="", og_path="assets/og.jpg"):
 <meta property="og:type" content="website"><meta property="og:site_name" content="Radhika Atolia"><meta property="og:url" content="{url}"><meta property="og:title" content="{html.escape(title)}"><meta property="og:description" content="{html.escape(desc)}">
 <meta property="og:image" content="{og}"><meta property="og:image:secure_url" content="{og}"><meta property="og:image:type" content="image/jpeg"><meta property="og:image:width" content="{w}"><meta property="og:image:height" content="{h}"><meta property="og:image:alt" content="{html.escape(title)}">
 <meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="{html.escape(title)}"><meta name="twitter:description" content="{html.escape(desc)}"><meta name="twitter:image" content="{og}">
-<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="icon" href="/favicon.ico" sizes="any"><link rel="icon" type="image/png" sizes="96x96" href="/assets/favicon-96.png"><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700&family=Parkinsans:wght@400;500;600;700&family=Fragment+Mono&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
@@ -179,13 +179,18 @@ def head(title, desc, page="", og_path="assets/og.jpg"):
 <div class="progress"><i></i></div>
 '''
 
+def url_of(page):
+    """Canonical path for a page file. cleanUrls means "work.html" 308-redirects
+    to "/work", so links must use the destination, never the .html form."""
+    return "/" if page == "index.html" else "/" + page.replace(".html", "")
+
 def nav(active=""):
     def a(href, label, k):
         ac = ' class="active"' if active == k else ""
         return f'<a href="{href}"{ac}>{label}</a>'
     return f'''<header class="nav"><div class="nav__inner">
-  <a href="index.html" class="nav__brand">Radhika</a>
-  <nav class="nav__links">{a("work.html","Work","work")}{a("about.html","About","about")}<a href="{RESUME_NAV}" target="_blank" rel="noopener">Resume</a></nav>
+  <a href="/" class="nav__brand">Radhika</a>
+  <nav class="nav__links">{a("/work","Work","work")}{a("/about","About","about")}<a href="{RESUME_NAV}" target="_blank" rel="noopener">Resume</a></nav>
   <button class="nav__toggle" aria-label="Menu">☰</button>
 </div></header>
 '''
@@ -257,9 +262,9 @@ def card(p, n):
   <div class="scard__in">
     <div class="scard__txt">
       <div><span class="scard__no">{p['n']} / 06 · {p['year']}</span><h3>{html.escape(p['title'])}</h3><p>{html.escape(p['blurb'])}</p></div>
-      <div><ul class="tags">{tags}</ul><a class="btn btn--orange" href="{p['page']}"><span>View case study</span><span class="arr">→</span></a></div>
+      <div><ul class="tags">{tags}</ul><a class="btn btn--orange" href="{url_of(p["page"])}"><span>View case study</span><span class="arr">→</span></a></div>
     </div>
-    <a class="scard__media" href="{p['page']}" aria-label="{html.escape(p['title'])}">{img(p['cover'], p['title'], extra='style="object-fit:contain"')}<span class="badge">Open <span>↗</span></span></a>
+    <a class="scard__media" href="{url_of(p["page"])}" aria-label="{html.escape(p['title'])}">{img(p['cover'], p['title'], extra='style="object-fit:contain"')}<span class="badge">Open <span>↗</span></span></a>
   </div>
 </article>'''
 
@@ -289,7 +294,7 @@ def build_index():
     <h1 data-split>I’m <span class="hl">Radhika,<svg viewBox="0 0 300 20" preserveAspectRatio="none" aria-hidden="true"><path d="M3 14 C 60 2, 110 20, 160 9 S 260 4, 297 12"/></svg></span> a product designer.</h1>
     <p class="hero__rot" data-reveal="up" style="--i:4">Lately I’ve been <b class="rot" data-words="shipping across 5 live products|turning driver rules into fair incentives|making plant care less panicky|designing feedback forms people finish|drawing stickers on the side"></b></p>
     <p class="hero__sub" data-reveal="up" style="--i:5">I enjoy figuring out what isn't working, making sense of messy problems, and turning them into simple, useful experiences.</p>
-    <div class="hero__cta" data-reveal="up" style="--i:7"><a class="btn" href="work.html"><span>See my work</span><span class="arr">→</span></a><a class="btn btn--ghost" href="about.html"><span>About me</span></a></div>
+    <div class="hero__cta" data-reveal="up" style="--i:7"><a class="btn" href="/work"><span>See my work</span><span class="arr">→</span></a><a class="btn btn--ghost" href="/about"><span>About me</span></a></div>
   </div>
   <div class="stage" aria-hidden="true"><div class="stage__in">
     <div class="layer panel-back"></div><div class="layer panel-ring"></div>
@@ -321,7 +326,7 @@ def build_index():
 
 <section class="sec" id="work" style="padding-top:0"><div class="wrap">
   <div class="work-head"><div><span class="eyebrow" data-reveal="up">Selected work</span><h2 class="serif-title" style="margin-top:18px" data-split>Projects I’ve <em>worked on</em></h2></div>
-  <a class="ilink" href="work.html" data-reveal="up">All projects →</a></div>
+  <a class="ilink" href="/work" data-reveal="up">All projects →</a></div>
   <div class="stack">{cards}</div>
 </div></section>
 
@@ -332,7 +337,7 @@ def build_index():
   <div><span class="eyebrow" data-reveal="up">About me</span>
    <h2 class="serif-title" style="margin:18px 0 24px" data-split>Hii! I’m Radhika.</h2>
    <p class="lead" data-reveal="up" style="--i:2">A product designer focused on creating thoughtful, well structured digital experiences. With 2.5+ years of experience designing scalable B2B SaaS products. Skilled in AI-assisted design workflows to accelerate exploration and iteration. Currently designing Jugnoo.</p>
-   <p style="margin-top:28px;--i:3" data-reveal="up"><a class="btn" href="about.html"><span>More about me</span><span class="arr">→</span></a></p></div>
+   <p style="margin-top:28px;--i:3" data-reveal="up"><a class="btn" href="/about"><span>More about me</span><span class="arr">→</span></a></p></div>
 </div></section>
 
 <section class="sec why"><div class="wrap">
@@ -353,7 +358,7 @@ def build_work():
     cards = ""
     for p in PROJECTS:
         tags = "".join(f"<li>{t}</li>" for t in p["tags"])
-        cards += f'''<a class="pcard" href="{p['page']}" data-cat="{p['cat']}" data-reveal="up" data-tilt="6">
+        cards += f'''<a class="pcard" href="{url_of(p["page"])}" data-cat="{p['cat']}" data-reveal="up" data-tilt="6">
  <div class="pcard__img" data-tilt-in style="background:{edge_color(p['cover'])}">{img(p['cover'], p['title'], extra='style="object-fit:contain"')}<span class="go">↗</span></div>
  <div class="pcard__meta"><h3>{html.escape(p['title'])}</h3><span class="yr">{p['n']} · {p['year']}</span></div>
  <p>{html.escape(p['blurb'])}</p><ul class="tags">{tags}</ul></a>'''
@@ -426,13 +431,13 @@ def more_projects(i):
     others = [PROJECTS[(i + k) % len(PROJECTS)] for k in range(1, len(PROJECTS))]
     fit = 'style="object-fit:contain"'
     cards = "".join(
-        '<a class="mcard" href="' + o["page"] + '">'
+        '<a class="mcard" href="' + url_of(o["page"]) + '">'
         '<span class="mcard__img">' + img(o["cover"], o["cs_title"], extra=fit) + '</span>'
         '<h3>' + html.escape(o["cs_title"]) + '</h3>'
         '<small>' + o["year"] + ' · ' + o["tags"][0] + '</small></a>'
         for o in others)
     return f'''<section class="more"><div class="wrap">
-  <div class="more__head"><h2 class="serif-title" data-split>More <em>projects</em></h2><a class="ilink" href="work.html">All projects →</a></div>
+  <div class="more__head"><h2 class="serif-title" data-split>More <em>projects</em></h2><a class="ilink" href="/work">All projects →</a></div>
   <div class="more__row">{cards}</div>
 </div></section>'''
 
