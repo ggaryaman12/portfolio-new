@@ -489,13 +489,40 @@ def build_cases():
         case_page(p, i, SUBTITLE[p["slug"]])
 
 def build_seo():
-    """robots.txt + sitemap.xml. A freshly launched domain has no history, so
-    give crawlers an explicit map. URLs use the canonical www host."""
-    pages = [""] + ["work", "about"] + [p["page"].replace(".html", "") for p in PROJECTS]
-    urls = "".join(
-        f"  <url><loc>{SITE}/{pg}</loc><changefreq>monthly</changefreq>"
-        f"<priority>{'1.0' if pg == '' else '0.8'}</priority></url>\n"
-        for pg in pages)
+    """robots.txt + sitemap.xml.
+
+    The sitemap is derived from the pages that are actually linked from the
+    site, not a hardcoded list. Listing a page nothing links to tells Google
+    "index this" while the site says it does not exist, and such orphans get
+    reported as crawled-but-not-indexed. Deriving it means the sitemap stays
+    truthful on its own: link a page and it appears, unlink it and it goes.
+    """
+    import glob as _glob
+    pages = {p["page"] for p in PROJECTS} | {"work.html", "about.html"}
+    linked = set()
+    for f in _glob.glob("*.html"):
+        if f in ("header.html", "footer.html"):
+            continue  # partials, noindexed in vercel.json
+        html_src = open(f, encoding="utf8").read()
+        for pg in pages:
+            slug = pg.replace(".html", "")
+            if f'href="/{slug}"' in html_src or f'href="{pg}"' in html_src:
+                linked.add(pg)
+
+    orphans = sorted(pages - linked)
+    if orphans:
+        print("  note: omitted from sitemap, nothing links to them:",
+              ", ".join(orphans))
+
+    ordered = ["index.html", "work.html", "about.html"] + [p["page"] for p in PROJECTS]
+    urls = ""
+    for pg in ordered:
+        if pg != "index.html" and pg not in linked:
+            continue
+        path = "" if pg == "index.html" else pg.replace(".html", "")
+        urls += (f"  <url><loc>{SITE}/{path}</loc><changefreq>monthly</changefreq>"
+                 f"<priority>{'1.0' if path == '' else '0.8'}</priority></url>\n")
+
     open("sitemap.xml", "w", encoding="utf8").write(
         '<?xml version="1.0" encoding="UTF-8"?>\n'
         '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
