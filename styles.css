@@ -167,6 +167,12 @@ section{position:relative}
   .hero__grid{grid-template-columns:1fr}.stage{margin:20px auto 0;max-width:460px}
   .hero{padding-top:110px}.scroll-cue{display:none}
 }
+@media(max-width:560px){
+  .hero__grid{gap:16px}.stage{margin:20px auto 0;max-width:100%;max-height:320px}
+  .hero{padding:80px 0 40px;min-height:auto}
+  .hero__greeting{font-size:32px;margin-bottom:8px}
+  .hero__title{font-size:28px;margin-bottom:16px}
+}
 
 /* ticker -------------------------------------------------------- */
 .ticker{background:var(--ink);color:var(--cream);overflow:hidden;padding:20px 0;transform:rotate(-1.4deg);margin:-10px -2vw 0;position:relative;z-index:2}
